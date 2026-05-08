@@ -98,8 +98,8 @@ export function FloatingChatbot() {
 
       {/* Chat window */}
       {isOpen && (
-        <div className="fixed bottom-24 right-6 z-50 w-[380px] max-w-[calc(100vw-2rem)] rounded-2xl border border-border/60 bg-card shadow-2xl flex flex-col overflow-hidden"
-          style={{ height: "560px" }}>
+        <div className="fixed bottom-24 right-6 z-50 w-[320px] max-w-[calc(100vw-2rem)] rounded-2xl border border-border/60 bg-card shadow-2xl flex flex-col overflow-hidden"
+          style={{ height: "460px" }}>
 
           {/* Header */}
           <div className="flex items-center gap-2.5 px-4 py-3 border-b border-border/40 bg-black/40 flex-shrink-0">
