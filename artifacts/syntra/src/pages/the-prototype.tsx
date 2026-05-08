@@ -124,13 +124,13 @@ export default function ThePrototype() {
     <div className="w-full py-20 px-6">
       <div className="container mx-auto max-w-5xl">
         {/* Header */}
-        <div className="mb-16 text-center">
+        <div className="mb-16">
           <p className="text-primary text-sm font-semibold font-mono mb-3">02. The Prototype</p>
           <h1 className="text-4xl md:text-5xl font-bold leading-tight mb-6">
             Two tools.<br />
             <span className="text-primary">One mission.</span>
           </h1>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto leading-relaxed">
+          <p className="text-muted-foreground text-lg max-w-2xl leading-relaxed">
             Detect AI-generated images with neural analysis, and explore deepfake research with our intelligent chatbot — both in real time.
           </p>
         </div>

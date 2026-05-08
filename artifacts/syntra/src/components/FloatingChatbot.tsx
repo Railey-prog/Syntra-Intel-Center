@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Bot, X, Send, User, Sparkles, Terminal, Minimize2 } from "lucide-react";
+import { Bot, X, Send, User, Sparkles, Terminal } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import { useSendChatMessage } from "@workspace/api-client-react";
 
@@ -98,8 +98,8 @@ export function FloatingChatbot() {
 
       {/* Chat window */}
       {isOpen && (
-        <div className="fixed bottom-6 right-6 z-50 w-[380px] max-w-[calc(100vw-2rem)] rounded-2xl border border-border/60 bg-card shadow-2xl flex flex-col overflow-hidden"
-          style={{ height: "580px" }}>
+        <div className="fixed bottom-24 right-6 z-50 w-[380px] max-w-[calc(100vw-2rem)] rounded-2xl border border-border/60 bg-card shadow-2xl flex flex-col overflow-hidden"
+          style={{ height: "560px" }}>
 
           {/* Header */}
           <div className="flex items-center gap-2.5 px-4 py-3 border-b border-border/40 bg-black/40 flex-shrink-0">
@@ -114,18 +114,6 @@ export function FloatingChatbot() {
                 Research-grounded AI
               </p>
             </div>
-            <button
-              onClick={() => setIsOpen(false)}
-              className="ml-auto text-muted-foreground/60 hover:text-foreground transition-colors"
-            >
-              <Minimize2 className="w-4 h-4" />
-            </button>
-            <button
-              onClick={() => setIsOpen(false)}
-              className="text-muted-foreground/60 hover:text-foreground transition-colors"
-            >
-              <X className="w-4 h-4" />
-            </button>
           </div>
 
           {/* Messages */}
@@ -231,6 +219,17 @@ export function FloatingChatbot() {
             </button>
           </div>
         </div>
+      )}
+
+      {/* Circular close button — shown when chat is open */}
+      {isOpen && (
+        <button
+          onClick={() => setIsOpen(false)}
+          className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-secondary border border-border/60 flex items-center justify-center shadow-lg hover:bg-muted transition-colors"
+          aria-label="Close Syntra Chat"
+        >
+          <X className="w-5 h-5 text-foreground" />
+        </button>
       )}
     </>
   );
