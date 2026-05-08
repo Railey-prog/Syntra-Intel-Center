@@ -34,6 +34,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
               <Link
                 key={link.href}
                 href={link.href}
+                onClick={() => window.scrollTo({ top: 0, behavior: "instant" })}
                 className="text-xs text-muted-foreground hover:text-foreground transition-colors"
               >
                 {link.label}

@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { ScanSearch, Terminal, Bot, Image, ArrowRight, Database, Cpu, MessageSquare, ShieldCheck, Upload, Zap } from "lucide-react";
 import { ImageAnalyzer } from "@/components/ImageAnalyzer";
 import { ChatbotPreview } from "@/components/ChatbotPreview";
@@ -120,6 +121,18 @@ function ArchitectureSection() {
 }
 
 export default function ThePrototype() {
+  useEffect(() => {
+    const hash = window.location.hash;
+    if (hash) {
+      const el = document.querySelector(hash);
+      if (el) {
+        setTimeout(() => el.scrollIntoView({ behavior: "smooth", block: "start" }), 100);
+      }
+    } else {
+      window.scrollTo({ top: 0, behavior: "instant" });
+    }
+  }, []);
+
   return (
     <div className="w-full py-20 px-6">
       <div className="container mx-auto max-w-5xl">
@@ -139,7 +152,7 @@ export default function ThePrototype() {
         <ArchitectureSection />
 
         {/* Live Image Analyzer — full width */}
-        <div className="mb-20">
+        <div id="live-image-analyzer" className="mb-20 scroll-mt-20">
           <div className="mb-6">
             <div className="flex items-center gap-2.5">
               <div className="w-8 h-8 rounded-lg bg-primary/20 border border-primary/30 flex items-center justify-center">

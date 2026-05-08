@@ -60,7 +60,7 @@ export default function Home() {
 
           {/* CTA buttons */}
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Link href="/the-prototype">
+            <Link href="/the-prototype#live-image-analyzer">
               <button className="flex items-center gap-2 px-7 py-3.5 rounded-md bg-primary text-primary-foreground font-semibold hover:bg-primary/90 transition-all neon-glow">
                 Try the Analyzer <ArrowRight className="w-4 h-4" />
               </button>
@@ -121,7 +121,7 @@ export default function Home() {
             <p className="text-muted-foreground mb-8 max-w-md mx-auto">
               No account required. Upload an image and get an AI-generation verdict in seconds.
             </p>
-            <Link href="/the-prototype">
+            <Link href="/the-prototype#live-image-analyzer">
               <button className="inline-flex items-center gap-2 px-8 py-3.5 rounded-md bg-primary text-primary-foreground font-semibold hover:bg-primary/90 transition-all neon-glow">
                 Open the Prototype <ArrowRight className="w-4 h-4" />
               </button>
