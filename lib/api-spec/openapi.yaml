@@ -3,13 +3,17 @@ info:
   # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: Syntra - AI Generated Image Detector with Chatbot API
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: chat
+    description: AI Chatbot powered by Groq and research datasets
+  - name: analyze
+    description: AI Image analysis via SightEngine
 paths:
   /healthz:
     get:
@@ -24,6 +28,71 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  /chat:
+    post:
+      operationId: sendChatMessage
+      tags: [chat]
+      summary: Send a chat message to the AI chatbot
+      description: Sends a user message and gets an AI response grounded in the research datasets
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ChatRequest"
+      responses:
+        "200":
+          description: AI response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ChatResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /analyze-image:
+    post:
+      operationId: analyzeImage
+      tags: [analyze]
+      summary: Analyze an image for AI generation
+      description: Uploads an image and returns whether it appears to be AI-generated using SightEngine
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AnalyzeImageRequest"
+      responses:
+        "200":
+          description: Analysis result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AnalyzeImageResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
 components:
   schemas:
     HealthStatus:
@@ -34,3 +103,101 @@ components:
       required:
         - status
 
+    ChatRequest:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The user's message
+        history:
+          type: array
+          items:
+            $ref: "#/components/schemas/ChatMessage"
+          description: Previous conversation history
+      required:
+        - message
+
+    ChatMessage:
+      type: object
+      properties:
+        role:
+          $ref: "#/components/schemas/ChatMessageRole"
+        content:
+          type: string
+      required:
+        - role
+        - content
+
+    ChatMessageRole:
+      type: string
+      enum: [user, assistant]
+
+    ChatResponse:
+      type: object
+      properties:
+        reply:
+          type: string
+          description: The AI assistant's reply
+        sources:
+          type: array
+          items:
+            type: string
+          description: Dataset sources referenced in the reply
+      required:
+        - reply
+        - sources
+
+    AnalyzeImageRequest:
+      type: object
+      properties:
+        imageUrl:
+          type: string
+          nullable: true
+          description: Public URL of the image to analyze
+        imageBase64:
+          type: string
+          nullable: true
+          description: Base64-encoded image data
+
+    AnalyzeImageResponse:
+      type: object
+      properties:
+        isAiGenerated:
+          type: boolean
+          description: Whether the image appears to be AI-generated
+        confidence:
+          type: number
+          description: Confidence score from 0 to 1
+        aiScore:
+          type: number
+          description: AI generation probability score (0-1)
+        verdict:
+          type: string
+          description: Human-readable verdict
+        details:
+          $ref: "#/components/schemas/AnalyzeImageResponseDetails"
+      required:
+        - isAiGenerated
+        - confidence
+        - aiScore
+        - verdict
+        - details
+
+    AnalyzeImageResponseDetails:
+      type: object
+      properties:
+        aiGeneratedScore:
+          type: number
+        realScore:
+          type: number
+      required:
+        - aiGeneratedScore
+        - realScore
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+      required:
+        - error

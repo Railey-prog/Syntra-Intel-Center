@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "Syntra Image Detector"
+version = "1.0.0"
+id = "artifacts/syntra"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 18300
+
+[services.development]
+run = "pnpm --filter @workspace/syntra run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/syntra", "run", "build" ]
+publicDir = "artifacts/syntra/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "18300"
+BASE_PATH = "/"
