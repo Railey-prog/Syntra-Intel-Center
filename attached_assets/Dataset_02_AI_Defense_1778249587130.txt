@@ -1,0 +1,149 @@
+Source: Nightingale & Farid, PNAS (2022)
+Title: AI-synthesized faces are indistinguishable from real faces and more trustworthy
+Tags: AI faces, GAN, StyleGAN2, photorealism, uncanny valley, trustworthiness, deepfake detection, perceptual studies
+
+=== KEY FINDINGS (Complete) ===
+
+FINDING 1: Baseline Accuracy (Experiment 1)
+- 315 participants
+- 48.2% average accuracy (95% CI [47.1%, 49.2%])
+- This is BELOW chance performance of 50%
+- No response bias detected
+- People performed WORSE than random guessing
+
+FINDING 2: Gender x Race Interaction for Real Faces
+- Male East Asian faces: higher accuracy than female East Asian faces
+- Male White faces: higher accuracy than female White faces
+- Not all faces are equally easy/hard to identify
+
+FINDING 3: Gender x Race Interaction for Synthetic Faces
+- White faces were the LEAST accurately classified (both male and female)
+- Male White faces: less accurate than female White faces
+- Reason: White faces are overrepresented in StyleGAN2 training dataset
+
+FINDING 4: Trained Performance (Experiment 2)
+- 219 new participants
+- With training + trial-by-trial feedback
+- Average accuracy: 59.0% (95% CI [57.7%, 60.4%])
+- No response bias
+- Still far from perfect (41% error rate)
+
+FINDING 5: No Improvement Over Time Despite Feedback
+- First 64 faces: 59.3% accuracy
+- Second 64 faces: 58.8% accuracy
+- Feedback had LIMITED impact
+- Some synthetic faces simply have NO perceptible artifacts
+
+FINDING 6: Trustworthiness Ratings (Experiment 3)
+- 223 participants
+- Scale: 1 (very untrustworthy) to 7 (very trustworthy)
+- Real faces average: 4.48
+- Synthetic faces average: 4.82
+- Synthetic faces are 7.7% MORE trustworthy than real faces
+- Difference is statistically significant [t(222) = 13.4, p < 0.001]
+
+FINDING 7: Trustworthiness by Race
+- Black faces: rated more trustworthy than South Asian faces
+- Otherwise, no significant effect across races
+
+FINDING 8: Trustworthiness by Gender
+- Women rated as significantly more trustworthy than men
+- Women: 4.94
+- Men: 4.36
+- Statistically significant [t(222) = 20.1, p < 0.001]
+
+FINDING 9: Most Trustworthy Faces (Top 4)
+- Top 3 most trustworthy faces = ALL SYNTHETIC (S)
+- 4th place = Real (R)
+- See Figure 3 in original paper
+
+FINDING 10: Least Trustworthy Faces (Bottom 4)
+- Bottom 4 least trustworthy faces = ALL REAL (R)
+- Zero synthetic faces in the least trustworthy category
+
+FINDING 11: Smiling Expression Analysis
+- Real faces smiling: 65.5%
+- Synthetic faces smiling: 58.8%
+- Smiling alone CANNOT explain trustworthiness difference
+
+FINDING 12: Hyperphotorealism Confirmed
+- AI faces have crossed the "uncanny valley"
+- Findings consistent with recent studies (refs 10, 11)
+- Realism extends ACROSS race and gender (not just White males)
+
+FINDING 13: Why Synthetic Faces Seem More Trustworthy
+- Synthesized faces look more like "average faces"
+- Average faces are statistically deemed more trustworthy
+- This is a mathematical/average effect, not intentional design
+
+=== THREATS IDENTIFIED BY RESEARCHERS ===
+
+Threat 1: Nonconsensual intimate imagery (aka "revenge porn")
+Threat 2: Small to large-scale financial fraud
+Threat 3: Disinformation campaigns
+Threat 4: "Liar's dividend" - any inconvenient recording can be called fake
+
+=== RECOMMENDATIONS FROM RESEARCHERS ===
+
+Recommendation 1: Developers should assess if risks outweigh benefits
+Recommendation 2: If risks are greater, do NOT develop the technology just because it's possible
+Recommendation 3: Parallel development of safeguards (e.g., robust watermarks)
+Recommendation 4: Reconsider laissez-faire approach to public code release
+Recommendation 5: Develop ethical guidelines for researchers, publishers, and media distributors
+
+=== MEDIA LITERACY TIPS (Direct from research) ===
+
+Tip 1: Human accuracy is only 48-59% - NEVER trust your eyes alone to spot AI faces.
+
+Tip 2: AI faces look MORE trustworthy than real faces. If a face seems unusually kind or trustworthy, that is a RED FLAG, not proof of authenticity.
+
+Tip 3: The top 3 most trustworthy faces in this study were ALL fake. Trustworthiness is NOT a signal of reality.
+
+Tip 4: Training and feedback only help a little (from 48% to 59%). Don't overestimate your ability after "learning" about deepfakes.
+
+Tip 5: Some synthetic faces have ZERO detectable artifacts. No amount of careful looking will reveal them.
+
+Tip 6: White faces are hardest to detect because AI is trained mostly on White faces. Detection difficulty varies by race.
+
+Tip 7: Don't use smiling as proof. 58.8% of AI faces smile - almost the same as real faces (65.5%).
+
+Tip 8: Women's faces (both real and synthetic) are rated as more trustworthy than men's. Be extra cautious with female-presenting faces.
+
+Tip 9: Average-looking faces are more likely to be AI. Real faces have more "imperfections" that actually make them look less trustworthy.
+
+Tip 10: Until watermarks become standard, your only defense is SOURCE VERIFICATION - not visual inspection.
+
+=== DIRECT QUOTES WORTH SAVING ===
+
+Quote 1: "Synthetically generated faces are not just highly photorealistic, they are nearly indistinguishable from real faces and are judged more trustworthy."
+
+Quote 2: "The most trustworthy faces were synthetic, and the least trustworthy faces were real."
+
+Quote 3: "Easy access to such high-quality fake imagery has led and will continue to lead to various problems."
+
+Quote 4: "We encourage those developing these technologies to consider whether the associated risks are greater than their benefits."
+
+Quote 5: "Safeguards could include incorporating robust watermarks into the image and video synthesis networks."
+
+=== METHODOLOGY NOTES (For advanced users) ===
+
+- Used StyleGAN2 (state-of-the-art at time of publication)
+- 400 synthetic faces (200 women, 200 men; 100 per race: Black, White, East Asian, South Asian)
+- 400 matched real faces from underlying database
+- Removed obvious rendering artifacts (makes task HARDER, not easier)
+- Amazon Mechanical Turk Master Workers used as participants
+- Catch trials included to ensure attention
+- Bonferroni correction applied for multiple comparisons
+
+=== STATISTICAL SUMMARY ===
+
+| Measure | Result |
+|---------|--------|
+| Baseline accuracy | 48.2% (below chance) |
+| Trained accuracy | 59.0% (still poor) |
+| Real face trust | 4.48/7 |
+| Synthetic face trust | 4.82/7 |
+| Women trust rating | 4.94/7 |
+| Men trust rating | 4.36/7 |
+| Real faces smiling | 65.5% |
+| Synthetic faces smiling | 58.8% |

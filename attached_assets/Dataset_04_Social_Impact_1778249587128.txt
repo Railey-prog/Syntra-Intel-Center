@@ -1,0 +1,224 @@
+Source: Issues in Information Systems, Volume 26, Issue 4, pp. 322-331, 2025 (Experimental study on AI-generated misinformation on Instagram/Meta, Feb 12 - April 20, 2025)
+Tags: AI-generated content, social media misinformation, disinformation, fake content, automation, human oversight, Meta, Instagram, engagement farming, content creation, platform regulation, fact-checking, Digital Services Act, Dead Internet Theory, ChatGPT, DALL-E, Midjourney
+
+=== KEY FINDINGS ===
+
+FINDING 1: Experimental Model Comparison Results
+MODEL 1 (Fully Automated AI Workflow):
+- Tools: Make framework, OpenAI API, ChatGPT agent, DALL-E, Google Sheets (1000+ quotes)
+- Cost: <$20 on OpenAI tokens
+- No human intervention
+- RESULT: 0 friends on Meta, 0 followers on Instagram
+- Technical failures: Instagram suspension (Day 3), Meta glitches, Google Sheets errors, duplicate/missing posts, automation stopped multiple times daily, free trial expiration, empty images, misspelled text, module failures
+
+MODEL 2 (Human-Enhanced AI Workflow):
+- Tools: Midjourney with human-curated prompts (iterative refinement)
+- Human logged in daily: liked content, added friends, followed random people on Instagram
+- Cost: <$20 on Midjourney subscription
+- RESULT: 5,000 friends on Meta (maximum), 375 Instagram followers
+- Received: "deluge" of compliments, private conversations, calls, voicemails, explicit sexual content, private body part photos, multiple marriage proposals, requests for contact information
+
+FINDING 2: Engagement Comparison Table
+Category - Model 1 (Automated) vs Model 2 (Human-Enhanced):
+Meta Friends: 0 vs 5,000
+Instagram Followers: 0 vs 375
+Direct Messages: None vs Deluge (compliments, convos, calls, voicemails)
+Explicit Content Received: None vs Yes (private body parts, sexual content)
+Marriage Proposals: 0 vs Several
+Marketing/Scam Offers: None vs Crypto scams, product promotions, tagging attempts
+Image Quality: Artistic but lacked realism vs Photorealistic, consistent persona
+Automation Reliability: Frequent breakdowns, glitches, resets vs N/A (manual posting)
+Content Consistency: Inconsistent, repeated prompts vs Carefully curated, diverse
+
+FINDING 3: Technical Failures of Pure Automation (Week-by-Week)
+Weeks 1-2: Day 3 Instagram suspended; Meta glitch preventing image posts; Instagram blocked for 2 weeks
+Weeks 3-4: Google Sheets errors; duplicate posts; missing images; automated flow stopped multiple times daily
+Weeks 5-6: Automation became "increasingly glitchy"; stopped running automatically
+Weeks 7-8: Free trial expired; empty images; misspelled text on images
+Weeks 9-10: Instagram module stopped working; Google Sheets module did not pick up correct data
+
+FINDING 4: AI-Generated Content Dominance on Meta (Nishad, 2025)
+- Analyzed 8,885 long-form posts on Meta from 2018 to 2024
+- Before 2023: 5.34% of content was AI-generated
+- After ChatGPT launch (late 2022): AI-generated content surged
+- By November 2024: 41.18% of content was AI-generated
+- 4.3x increase in two years
+- Average between 2023-2024: 24.05% AI-crafted posts
+
+FINDING 5: Dead Internet Theory
+- "Avoiding AI-generated content online has become nearly impossible" (Sahota, 2024)
+- AI-created material includes: search results, images, articles, music
+- Dead Internet Theory: claim that most content online is produced by AI, not humans
+- AI personas lack lived experiences, emotions, and ability to connect authentically (Wheatley, 2025)
+
+FINDING 6: High Engagement Attracts Malicious Actors
+Model 2 received:
+- Crypto investment scams
+- Marketing offers from online social media marketers
+- Tagging attempts "counting on users' ignorance to understand profile settings"
+- Users potentially exposed to "many tags promoting varieties of scams"
+- Explicit sexual content and private pictures
+- Marriage proposals and requests for personal contact information
+
+FINDING 7: Meta Monetization Requirements
+- Subscriptions: 10,000 followers OR 250+ returning viewers + 50,000 post engagements OR 180,000 watch minutes (past 60 days)
+- Subscription fees: $4.99 - $29.99 monthly
+- Meta pays $8.75 - $10 per 1,000 views (ActionSprout, 2025)
+- Stars program: 500+ followers for 30+ consecutive days, age 18+, no children's content
+
+FINDING 8: Meta Fact-Checking Policy Change (January 7, 2025)
+- CEO Mark Zuckerberg announced: fact-checking replaced with "community notes" system
+- Meta ended third-party fact-checking partnerships (started 2016 after 2016 U.S. election backlash)
+- Meta was "once a pioneer in adopting third-party fact-checking"
+- Studies consistently show Meta and Instagram are major sources of misinformation (elections, health topics, hate speech globally)
+- Change currently limited to U.S. but has global implications
+
+FINDING 9: Regulatory Approaches
+- European Union's Digital Services Act (DSA) now includes provisions specifically addressing synthetic media and manipulation potential
+- Requires disclosure of AI-generated content
+- Governments worldwide considering legislation requiring disclosure of AI-generated content
+
+FINDING 10: Intentional vs Unintentional Sharing of Fake Content (Ardèvol-Abreu et al., 2020)
+- Sharing fake content is a two-dimensional phenomenon: both intentional AND unintentional behaviors
+- Some participants expressed distrust toward fact-checkers
+- Lack of understanding of how fact-checking process works
+
+FINDING 11: Misinformation Propagation Dynamics (Del Vicario et al., 2016)
+- Different narratives (conspiracy theories vs scientific content) spread within similar information consumption patterns
+- Conspiracy theories and scientific content are key factors in information consumption
+- Developed data-driven model of rumor spreading
+
+FINDING 12: Detection Challenges (Shu et al., 2020; Lazer et al., 2018)
+- Weak supervision approach (detecting disinformation with limited labeled data) is a major problem
+- User engagement directly leads to spread of misinformation
+- Two primary strategies: empower individuals to identify fake content, and platform interventions to limit spread
+- Need for more collaboration between social media platforms
+
+FINDING 13: Algorithm + Human Expertise (Collins et al., 2021)
+- Combining machine learning algorithms with human expertise enhances accuracy of detecting fake content
+- Strategy using mix of algorithms AND human knowledge is most effective
+
+FINDING 14: Social Media Hinders Ethical Decision-Making (Chauhan et al., 2022)
+- Social media can influence individual's problem recognition and ethical reasoning
+- Overall, social media "tends to hinder ethical decision-making"
+
+FINDING 15: Teen Vulnerability on Social Media
+- 76% of students obtain daily news from social media (Riccardelli et al., 2020)
+- Teenagers have round-the-clock access to curated, idealized profiles (Woods & Scott, 2016)
+- Linked to increased anxiety, low self-esteem, depression
+- Teens engage in online sexual activities (OSA) with limited ability to distinguish healthy vs harmful use (Munno et al., 2017)
+- Social media can significantly influence teenagers' decision-making for health-risk behaviors (alcohol, tobacco use) (Halpern-Felsher et al., 2016)
+
+=== DIRECT QUOTES ===
+
+Quote 1: "Model 1 did not get a single friend on Meta, although the content was inspirational, and the images were very artistic."
+
+Quote 2: "Model 2, which maintained human interaction, performed much better. By the end of the experiment, the Meta page had reached a maximum of 5000 friends."
+
+Quote 3: "There was a deluge of direct messages, containing compliments, initiations for private conversations, multiple calls on the platform, voicemails, private pictures (including pictures of private body parts and sexual content), several marriage proposals, and requests for additional contact information."
+
+Quote 4: "Before 2023, only 5.34% of content was AI-generated. However, following the launch of OpenAI's ChatGPT in late 2022, AI-generated content surged, reaching 41.18% by November 2024."
+
+Quote 5: "Avoiding AI-generated content online has become nearly impossible." (Sahota, 2024)
+
+Quote 6: "AI personas lack lived experiences, emotions, and the ability to connect with audiences on a relatable level, potentially weakening the authenticity and appeal of the platforms." (Wheatley, 2025)
+
+Quote 7: "Meta's decision to end its third-party fact-checking program has sparked widespread concern among fact-checkers, media outlets, and researchers." (Arya & Kanozia, 2025)
+
+Quote 8: "Studies have consistently shown that Meta and Instagram are major sources of misinformation, including during elections, on health topics, and in spreading hate speech globally." (Arya & Kanozia, 2025)
+
+Quote 9: "Meta, once a pioneer in adopting third-party fact-checking in 2016 after facing backlash for enabling misinformation during the U.S. elections, ended these partnerships in early 2025."
+
+=== STATISTICAL SUMMARY ===
+
+| Statistic | Value |
+|-----------|-------|
+| Model 1 Meta friends | 0 |
+| Model 2 Meta friends | 5,000 |
+| Model 2 Instagram followers | 375 |
+| AI-generated content on Meta before 2023 | 5.34% |
+| AI-generated content on Meta by November 2024 | 41.18% |
+| Increase in AI content (2 years) | 4.3x |
+| Average AI content (2023-2024) | 24.05% |
+| Posts analyzed by Nishad (2025) | 8,885 |
+| Students getting news from social media | 76% |
+| Meta subscription price range | $4.99 - $29.99/month |
+| Meta pay per 1,000 views | $8.75 - $10 |
+
+=== MEDIA LITERACY TIPS ===
+
+Tip 1: Over 40% of long-form posts on Meta are now AI-generated (November 2024). Nearly half of what you read in long posts on Facebook is NOT written by humans. Assume nothing is human until verified.
+
+Tip 2: Pure automated AI accounts (no human interaction, no replies, no liking other content) get ZERO engagement. If an account does not interact back, it is likely a bot.
+
+Tip 3: High-engagement AI accounts ATTRACT scammers. Successful AI-generated profiles receive crypto scams, marketing exploitation, explicit content, and marriage proposals. Popular accounts are targets for malicious actors trying to exploit followers.
+
+Tip 4: Meta ELIMINATED third-party fact-checking in January 2025, replacing it with "community notes." There is NO professional fact-checking on Meta as of 2025. Users are on their own.
+
+Tip 5: Teenagers are extremely vulnerable: 76% get news from social media, have 24/7 access to AI-generated content designed to maximize engagement, which promotes anxiety, depression, and low self-esteem.
+
+Tip 6: The "Dead Internet Theory" is no longer a theory. Most content online (search results, images, articles, music) is now AI-generated. Users are likely interacting with bots more than humans.
+
+Tip 7: People share fake content BOTH intentionally AND unintentionally (Ardèvol-Abreu et al., 2020). Even people who know something is fake might share it. Do not assume malicious intent - ignorance is equally dangerous.
+
+Tip 8: Conspiracy theories spread using the SAME patterns as scientific content (Del Vicario et al., 2016). Engagement algorithms do not differentiate between truth and lies. If it keeps users on the platform, it gets promoted.
+
+Tip 9: Detecting AI content with limited labeled data is a MAJOR challenge (Shu et al., 2020). Detection tools need massive training datasets. "AI detector" websites are likely inaccurate.
+
+Tip 10: Machine learning + human expertise = best for detection (Collins et al., 2021). Neither alone is sufficient. Use tools AND cross-reference sources.
+
+Tip 11: Social media hinders ethical decision-making (Chauhan et al., 2022). Being on these platforms makes users WORSE at recognizing ethical problems. Take breaks. Do not make important decisions while scrolling.
+
+Tip 12: If a social media account is fully automated (no human interaction, no replies to comments, no liking other content), it is likely a misinformation bot. Pure automation got ZERO engagement in the study. Real human-run accounts engage back.
+
+=== THREATS IDENTIFIED ===
+
+Threat 1: AI-generated content flooding platforms (low-quality, inauthentic)
+Threat 2: Misinformation spread (elections, health, hate speech)
+Threat 3: Scams and crypto fraud targeting engaged users
+Threat 4: Sexual exploitation (explicit content sent to AI-run accounts)
+Threat 5: Child vulnerability (teens cannot distinguish AI from human)
+Threat 6: End of fact-checking on Meta (as of January 7, 2025)
+Threat 7: Dead Internet Theory becoming reality (human content is minority)
+Threat 8: Ethical decision-making impairment from social media use
+Threat 9: Monetization incentives for fake content ($8.75-$10 per 1,000 views)
+
+=== RECOMMENDATIONS FROM AUTHORS ===
+
+Recommendation 1: Widespread education about AI capabilities and limitations
+Recommendation 2: Critical evaluation of digital content should be "as essential as traditional literacy" (Downes, 2025)
+Recommendation 3: Platform regulation and responsible AI usage
+Recommendation 4: Transparency in AI-generated content labeling
+Recommendation 5: Human oversight in AI content distribution
+Recommendation 6: Integration of ethics into AI-driven information generation (Germani & Biller-Andorno, 2024)
+Recommendation 7: More collaboration between social media platforms (Lazer et al., 2018)
+Recommendation 8: Developing information literacy tools
+Recommendation 9: Critical thinking skills integrated into society
+Recommendation 10: Clear regulatory frameworks (EU DSA as model)
+
+=== METHODOLOGY NOTES ===
+
+Experiment duration: February 12, 2025 - April 20, 2025 (10 weeks)
+Platforms: Instagram and Meta (Facebook)
+Content type: Inspirational quotes + AI-generated images
+
+Model 1 tools:
+- Make framework (automation)
+- OpenAI API (tokenized, paid subscription)
+- ChatGPT agent (prompt generation)
+- DALL-E (image generation)
+- Google Sheets (quote database, 1000+ quotes)
+
+Model 2 tools:
+- Midjourney (image generation)
+- Manual human posting
+- Daily human engagement (liking, following, adding friends)
+- Iterative prompt refinement (repeated until satisfactory result)
+
+=== COMPARISON WITH OTHER PAPERS ===
+
+Nightingale & Farid (PNAS 2022): Human detection accuracy is 48-59% - THIS PAPER confirms why: 41% of content is AI, humans cannot keep up
+
+Gilbert & Gilbert (2024): Predicted 40% deepfakes by 2024 - THIS PAPER confirms: 41.18% AI content by November 2024
+
+Makowski et al. (2025): Psychological biases in detection - THIS PAPER adds: even without bias, pure automation gets ZERO engagement

@@ -26,27 +26,27 @@ const DATASETS: DatasetEntry[] = [
   {
     name: "Dataset_01_Human_Vision",
     label: "Gilbert & Gilbert (2024) — AI in Combatting Deepfakes",
-    content: loadDataset("Dataset_01_Human_Vision_1778221206853.txt"),
+    content: loadDataset("Dataset_01_Human_Vision_1778249587131.txt"),
   },
   {
     name: "Dataset_02_AI_Defense",
     label: "Nightingale & Farid, PNAS (2022) — AI-synthesized faces",
-    content: loadDataset("Dataset_02_AI_Defense_1778221206852.txt"),
+    content: loadDataset("Dataset_02_AI_Defense_1778249587130.txt"),
   },
   {
     name: "Dataset_03_Media_Ethics",
     label: "Makowski et al. (2025) — Too beautiful to be fake",
-    content: loadDataset("Dataset_03_Media_Ethics_1778221206851.txt"),
+    content: loadDataset("Dataset_03_Media_Ethics_1778249587129.txt"),
   },
   {
     name: "Dataset_04_Social_Impact",
     label: "Issues in Information Systems (2025) — AI-generated misinformation on social media",
-    content: loadDataset("Dataset_04_Social_Impact_1778221206850.txt"),
+    content: loadDataset("Dataset_04_Social_Impact_1778249587128.txt"),
   },
   {
     name: "Dataset_05_User_Psychology",
     label: "Folorunsho & Boamah (2025) — Deepfake Technology and its Impact",
-    content: loadDataset("Dataset_05_User_Psychology_1778221206848.txt"),
+    content: loadDataset("Dataset_05_User_Psychology_1778249587127.txt"),
   },
 ];
 

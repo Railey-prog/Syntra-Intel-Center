@@ -1,0 +1,240 @@
+Source: Makowski, D., Te, A.S., Neves, A., Kirk, S., Liang, N.Z., Mavros, P., & Chen, S.H.A. (2025). "Too beautiful to be fake: Attractive faces are less likely to be judged as artificially generated." Acta Psychologica, 252, 104670.
+Tags: attractiveness, beauty, trustworthiness, familiarity, AI-generated faces, reality beliefs, simulation monitoring, narcissism, paranoid ideation, honesty-humility, gender differences, face perception, fake news, post-truth
+
+=== KEY FINDINGS ===
+
+FINDING 1: The "Fake Face" Phenomenon
+- ALL 109 faces shown were REAL faces from the American Multiracial Face Database (AMFD)
+- Despite this, participants believed 44% of faces were FAKE (95% CI [12%, 64%])
+- 56% were judged as real
+- Participants were often HIGH CONFIDENCE in their incorrect judgments
+- This demonstrates how easily reality beliefs can be manipulated by simple instructions
+
+FINDING 2: Instruction Power
+- Participants were told "about half" of images were AI-generated
+- This single instruction caused massive misclassification
+- People judged REAL faces as FAKE simply because they were TOLD some were fake
+- "Our beliefs of reality can be so easily re-programmed with simple instructions"
+
+FINDING 3: Attractiveness Effect - Males vs Females (DIFFERENT patterns)
+For MALES (linear relationship):
+- More attractive = more likely to be judged REAL
+- More beautiful = more likely to be judged REAL
+- Evolutionary explanation: males place more emphasis on facial attractiveness as sign of reproductive potential
+
+For FEMALES (quadratic/inverse U-shaped relationship):
+- BOTH very attractive AND very unattractive faces judged as MORE REAL
+- Average-looking faces judged as MORE FAKE
+- Aligned with "affective reality theory"
+
+FINDING 4: Beauty vs Attractiveness are Different
+- Beauty (objective physical features) and Attractiveness (subjective personal appeal) had DIFFERENT effects
+- For females: beauty affected confidence in FAKE judgments (very beautiful or very ugly = more confident they were fake)
+- Attractiveness had broader effects
+- These constructs cannot be treated as identical in research
+
+FINDING 5: Trustworthiness Effects
+- Linear relationship for FEMALES only: more trustworthy = more likely judged REAL
+- Quadratic relationship for confidence: low AND high trustworthiness faces judged with HIGHER confidence (both real and fake)
+- Possible mechanism: females have increased risk-taking aversion, affecting trust judgments
+- Contrary to expectation, trustworthiness was not a strong predictor
+
+FINDING 6: Familiarity Effects (Males only)
+- Familiarity increased CONFIDENCE that faces were real (positive linear: β = 9.98)
+- Unfamiliar faces = more confidently judged as fake (negative linear: β = -12.41)
+- No significant effect on actual belief (just confidence)
+- Males show overconfidence in face recall compared to females
+
+FINDING 7: Individual Differences - Honesty-Humility
+- Higher honesty-humility = LOWER confidence in BOTH real AND fake judgments
+- β_real = -1.62, β_fake = -1.16
+- Interpretation: people with high honesty-humility perceive higher risk in decision-making
+- They are more conservative in their confidence ratings
+- They may worry about consequences of being wrong (e.g., "being seen as bad at the task")
+
+FINDING 8: Individual Differences - Narcissism (Acclaim Seeking)
+- Higher acclaim-seeking narcissism = MORE faces judged as REAL (β = 2.24)
+- Higher acclaim-seeking = HIGHER confidence in BOTH real AND fake judgments
+- β_real = 1.65, β_fake = 1.62
+- Narcissists are less likely to engage in analytical reasoning
+- They are more vigilant and attentive to external stimuli
+- They are OVERCONFIDENT in their ability to detect fakes
+
+FINDING 9: Individual Differences - Narcissism (Authoritativeness)
+- Higher authoritativeness = LOWER confidence in BOTH judgments
+- β_real = -1.57, β_fake = -1.49
+- Different narcissism facets have OPPOSITE effects on confidence
+- This shows narcissism is not a unified construct
+
+FINDING 10: Paranoid Ideation Trend
+- Positive trend (p = .054) between persecutory ideation and belief that faces are REAL (β = 1.87)
+- Interpretation: people with higher paranoia are more sensitive to social threat cues
+- Greater saliency and emotionality → increased perception of realness
+- Supported by VR studies: paranoid individuals report greater "presence" in virtual environments
+
+FINDING 11: AI Enthusiasm Effect
+- AI-Enthusiasm factor (interest and excitement in AI) related to HIGHER confidence in BOTH real AND fake judgments
+- β_real = 0.21, β_fake = 0.31
+- AI-Realness (belief AI can create realistic content) had NO significant effect
+- AI-Danger (concerns about unethical AI use) had NO significant effect
+- Enthusiasm ≠ knowledge. Enthusiastic people may overestimate their AI detection ability
+
+FINDING 12: Variance Explained is LOW
+- Participants and stimuli together explained <20% of belief variance
+- Large contribution of OTHER subjective processes
+- Individual factors + stimulus factors = less than 20%
+- Most of what drives reality beliefs remains unknown
+- This suggests highly idiosyncratic, context-dependent processes
+
+FINDING 13: Confidence Decreases Over Time
+- Items presented later in session = judged with SAME bias but LOWER confidence
+- Effect on real judgments: β = -0.003
+- Effect on fake judgments: β = -0.002
+- Participants become less confident but not more accurate
+
+FINDING 14: No Effect of "Objective" AI Expectations
+- Participants' expectations about AI's capability to generate realistic images did NOT predict beliefs
+- What mattered was ENTHUSIASM, not perceived capability
+- "Enthusiasm about AI technology" increased confidence, but not accuracy
+
+FINDING 15: 500ms Exposure is Sufficient
+- Faces presented for only 500 milliseconds
+- Participants formed strong, confident judgments in half a second
+- First impressions are powerful and resistant to correction
+
+=== DIRECT QUOTES ===
+
+Quote 1: "Despite all the stimuli being real faces from the same database, all participants believed (to high degrees of confidence) that a significant proportion of them were fake."
+
+Quote 2: "Our beliefs of reality can be so easily re-programmed with simple instructions and lead to high-confidence answers."
+
+Quote 3: "Attractiveness judgement, and its role in simulation monitoring, is a multidimensional construct that cannot be reduced to physical facial attractiveness, in particular for women."
+
+Quote 4: "Stimuli-related and participant-related characteristics accounted together for <20% of the beliefs variance, suggesting a large contribution of other subjective processes."
+
+Quote 5: "People with higher levels of paranoia are more sensitive to cues of social threat. It is plausible that paranoid traits confer greater saliency and emotionality to observed faces, hence increasing perceptions of its realness."
+
+Quote 6: "The default tendency is to believe that experiences are real, with emotional and bodily reactions playing a pivotal role in reinforcing or challenging this belief."
+
+Quote 7: "When emotional or bodily responses become too intense or overwhelming, the default belief shifts towards non-reality beliefs as an emotion regulation mechanism ('it cannot be real')."
+
+=== COMPLETE STATISTICAL SUMMARY ===
+
+| Finding | Statistic | Significance |
+|---------|-----------|--------------|
+| Average "fake" judgments (on REAL faces) | 44% [12-64% CI] | - |
+| Variance from participants (ICC) | 9.0% | - |
+| Variance from stimuli (ICC) | 9.6% | - |
+| Attractiveness → Real (Males) | β = 16.57 [7.33, 25.82] | p < .001 |
+| Attractiveness quadratic (Females, real) | β = 7.82 [1.81, 13.84] | p = .011 |
+| Beauty → Real (Males only) | β = 11.82 [4.28, 20.21] | p = .006 |
+| Trustworthiness → Real (Females) | β = 6.44 [-0.11, 13.00] | p = .0054 |
+| Familiarity confidence real (Males) | β = 9.98 [3.83, 16.13] | p = .001 |
+| Familiarity confidence fake (Males) | β = -12.41 [-20.27, -4.54] | p = .002 |
+| Honesty-Humility confidence real | β = -1.62 [-2.55, -0.70] | p < .001 |
+| Honesty-Humility confidence fake | β = -1.16 [-2.09, -0.23] | p = .014 |
+| Acclaim Seeking (Narcissism) belief | β = 2.24 [1.17, 4.27] | p = .015 |
+| Acclaim Seeking confidence real | β = 1.65 [0.59, 2.70] | p = .002 |
+| Authoritativeness confidence real | β = -1.57 [-2.58, -0.57] | p = .002 |
+| Paranoid ideation (trend) | β = 1.87 [0.99, 3.54] | p = .054 |
+
+=== MEDIA LITERACY TIPS (Direct from research) ===
+
+Tip 1: You are NOT good at detecting AI faces. In this study, people judged REAL faces as fake 44% of the time just because someone TOLD them some were fake. Your "detection" is heavily influenced by expectation, not reality.
+
+Tip 2: Attractive faces trick you. Males tend to judge attractive faces as real (linear effect). Females judge both very attractive AND very unattractive faces as real (quadratic effect). Question your bias toward "beautiful" people in photos.
+
+Tip 3: If you are narcissistic (acclaim-seeking), you are MORE likely to believe faces are real AND more confident about it. Overconfidence in fake detection is a DANGER SIGN, not a strength.
+
+Tip 4: If you are high in honesty-humility, you are LESS confident in your judgments. This is actually GOOD - it means you might verify sources instead of trusting your gut.
+
+Tip 5: Paranoia might ironically make you MORE likely to think faces are real (not fake). Because you are hypervigilant to social threat, faces feel more salient and "real." Your suspicion does not protect you.
+
+Tip 6: Enthusiasm about AI makes you MORE confident in your judgments - but NOT more accurate. Liking AI does not mean you can detect AI-generated content.
+
+Tip 7: Physical beauty and personal attractiveness are DIFFERENT. A face can be beautiful but not attractive to you (or vice versa). Don't assume one predicts the other when judging authenticity.
+
+Tip 8: First impressions happen in 500 milliseconds - less than a blink. These rapid judgments are confident but often wrong. SLOW DOWN.
+
+Tip 9: If a face seems "average" or "unremarkable," you are MORE likely to judge it as fake (especially if you are female). This is a bias toward finding "fake-ness" in normal faces.
+
+Tip 10: Familiarity increases confidence, not accuracy. Just because a face reminds you of someone doesn't mean it's real.
+
+Tip 11: Trustworthy-looking faces are judged as more real by females. If you are female, be extra suspicious of faces that look "trustworthy" - that bias might be tricking you.
+
+Tip 12: The more time passes between seeing a face and judging it, the LESS confident you become. Make decisions immediately if you must, but prefer verification tools over memory.
+
+Tip 13: The instructions you receive before looking at content DRAMATICALLY change what you believe. If someone says "some of these are fake," you will see fakes everywhere - even when none exist.
+
+Tip 14: Less than 20% of why you believe something is real or fake comes from the actual stimulus and your personality. Most is UNKNOWN subjective process. Do not trust your gut.
+
+=== CONTRADICTIONS / NUANCES with Previous Papers ===
+
+| Previous Paper (Nightingale & Farid, PNAS 2022) | This Paper (Makowski et al., 2025) | Resolution |
+|--------------------------------------------------|-------------------------------------|-------------|
+| AI faces judged MORE trustworthy than real | When TOLD faces are AI, trust ratings DECREASE | Context matters: prior information changes everything |
+| 50% human accuracy | REAL faces judged fake 44% of time | People are biased, not just inaccurate |
+| Trustworthy-looking = possible AI | Trustworthy = judged more real (females) | Gender matters; also instructions matter |
+
+=== COMPARISON WITH GILBERT & GILBERT (2024) ===
+
+| Gilbert & Gilbert (2024) | Makowski et al. (2025) |
+|--------------------------|------------------------|
+| 40% of videos may be deepfakes by 2024 | 44% of REAL faces judged as fake |
+| AI detection is reactionary | Beliefs are programmable by instructions |
+| Focus on technology limitations | Focus on psychological biases |
+| Regulations needed (EU DSA) | Individual differences matter (narcissism, paranoia, honesty-humility) |
+
+=== NEW CONSTRUCTS INTRODUCED ===
+
+1. "Simulation monitoring" - the psychological process of judging whether something is real or fake
+2. "Affective reality theory" - default tendency to believe experiences are real; extreme emotions trigger "it cannot be real" as protection
+3. Quadratic relationship between affect and reality beliefs (inverse U-shaped)
+4. Distinction between Attractiveness (personal, subjective) and Beauty (objective, aesthetic)
+
+=== MEASURES USED (for researchers) ===
+
+- Mini-IPIP6 (6 personality traits: Honesty-Humility, Emotionality, Extraversion, Agreeableness, Conscientiousness, Openness)
+- SIAS-6 & SPS-6 (social anxiety)
+- GAAIS (General Attitudes towards AI Scale)
+- FFNI-BF (30 items, 9 facets of narcissism)
+- R-GPTS (18 items, paranoid thinking: Persecutory Ideation, Social Reference)
+- IUS-12 (intolerance to uncertainty)
+- Self-rated attractiveness (2 items)
+
+=== STIMULUS DETAILS ===
+
+- Database: American Multiracial Face Database (AMFD)
+- 109 neutral-expression faces (89 female, 20 male)
+- Racially ambiguous: multiracial, Latinx, White
+- 33% Asian/White, 22% Latinx/White, 11% Asian/Latinx, 6% White/Middle Eastern, 5% Black/White, 5% Asian/Middle Eastern
+- 500ms exposure time
+- Real-fake rating scale: -1 (fake) to +1 (real)
+
+=== METHODOLOGICAL CAVEATS ===
+
+1. All faces were real - no actual AI faces used
+2. Participants were TOLD "about half" were AI-generated (demand effect possible)
+3. Faces shown twice (first for ratings, second for reality judgments) - possible familiarity confound
+4. Short re-exposure delay (could increase familiarity)
+5. Low number of male faces (20 vs 89 female) - gender effects need replication with balanced stimuli
+6. Self-selected online sample (Prolific) - not representative of general population
+
+=== KEY TAKEAWAY FOR CHATBOT DESIGN ===
+
+This paper REVEALS that:
+- Humans are NOT just inaccurate at detecting fakes (Nightingale & Farid)
+- Humans are SYSTEMATICALLY BIASED by attractiveness, familiarity, their own personality, and INSTRUCTIONS
+- Even when looking at 100% REAL faces, people confidently call 44% of them FAKE
+- This means: your chatbot cannot trust user judgments about what is real or fake
+- Users need to be made aware of their OWN biases, not just taught "how to spot fakes"
+
+=== PRACTICAL APPLICATIONS FOR CHATBOT ===
+
+Use this paper when users say:
+- "This face looks too beautiful to be fake" → Actually, beautiful faces are judged MORE real (males) or both very beautiful and very ugly are judged real (females)
+- "I'm confident this is fake" → Confidence is correlated with narcissism, not accuracy
+- "I can spot AI faces easily" → People judged REAL faces as fake 44% of the time
+- "I'm suspicious of everything" → Paranoia may actually make you think MORE things are real
+- "I love AI technology" → Enthusiasm increases confidence but not accuracy
+- "This face looks trustworthy" → That biases you toward "real" (especially if female)
