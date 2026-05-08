@@ -20,7 +20,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-border/40 bg-black/80">
+      <footer className="border-t border-border/40 bg-background">
         {/* Top row: logo + nav links */}
         <div className="container mx-auto px-6 py-6 flex flex-col md:flex-row items-center justify-between gap-4 border-b border-white/5">
           <Link href="/" className="flex items-center gap-2">
