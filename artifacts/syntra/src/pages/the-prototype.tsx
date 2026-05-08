@@ -138,8 +138,8 @@ export default function ThePrototype() {
         {/* Architecture section */}
         <ArchitectureSection />
 
-        {/* Live Image Analyzer — centered */}
-        <div className="mb-20 mx-auto max-w-3xl">
+        {/* Live Image Analyzer — full width */}
+        <div className="mb-20">
           <div className="mb-6">
             <div className="flex items-center gap-2.5">
               <div className="w-8 h-8 rounded-lg bg-primary/20 border border-primary/30 flex items-center justify-center">
@@ -154,8 +154,8 @@ export default function ThePrototype() {
           <ImageAnalyzer />
         </div>
 
-        {/* Syntra Intel Chat — centered */}
-        <div className="mx-auto max-w-3xl">
+        {/* Syntra Intel Chat — full width */}
+        <div className="w-full">
           <div className="mb-6">
             <div className="flex items-center justify-between flex-wrap gap-4">
               <div className="flex items-center gap-2.5">
