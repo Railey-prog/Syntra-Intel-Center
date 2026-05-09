@@ -220,7 +220,7 @@ export default function ThePrototype() {
               <span className="text-primary">One mission.</span>
             </h1>
           </div>
-          <p className="text-muted-foreground text-lg leading-relaxed md:pb-1 max-w-sm">
+          <p className="text-muted-foreground text-lg leading-relaxed md:pb-1 flex-1">
             Detect AI-generated images with neural analysis, and explore
             deepfake research with our intelligent chatbot — both in real time.
           </p>
