@@ -44,7 +44,7 @@ export default function Conclusion() {
               <p className="text-muted-foreground text-sm mb-8">
                 Access the live prototype to analyze images or query the research database.
               </p>
-              <Link href="/the-prototype">
+              <Link href="/the-prototype#live-image-analyzer">
                 <button className="flex items-center gap-2 px-6 py-3 rounded-md bg-primary text-primary-foreground font-semibold hover:bg-primary/90 transition-all neon-glow">
                   Try the Analyzer <ArrowRight className="w-4 h-4" />
                 </button>
