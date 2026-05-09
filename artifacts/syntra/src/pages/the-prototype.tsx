@@ -209,7 +209,7 @@ export default function ThePrototype() {
     <div className="w-full py-20 px-6">
       <div className="container mx-auto max-w-5xl">
         {/* Header */}
-        <div className="mb-16 flex flex-col md:flex-row md:items-end gap-6 md:gap-12">
+        <div className="mb-16 flex flex-col md:flex-row md:items-center gap-6 md:gap-12">
           <div className="flex-shrink-0">
             <p className="text-primary text-sm font-semibold font-mono mb-3">
               02. The Prototype
