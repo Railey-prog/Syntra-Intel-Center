@@ -4,47 +4,33 @@ import { retrieveRelevantContext } from "../lib/datasets";
 
 const router: IRouter = Router();
 
-const MODEL = "llama-3.3-70b-versatile";
+const GROQ_MODEL = "llama-3.3-70b-versatile";
 const GROQ_BASE = "https://api.groq.com/openai/v1/chat/completions";
+
+const OPENROUTER_MODEL = "meta-llama/llama-3.3-70b-instruct:free";
+const OPENROUTER_BASE = "https://openrouter.ai/api/v1/chat/completions";
 
 function isRateLimitError(err: unknown): boolean {
   const msg = err instanceof Error ? err.message : String(err);
   return msg.includes("429") || msg.toLowerCase().includes("quota") || msg.toLowerCase().includes("rate limit");
 }
 
-async function withRetry<T>(
-  fn: () => Promise<T>,
-  maxAttempts = 3,
-  baseDelayMs = 2000,
-): Promise<T> {
-  let lastErr: unknown;
-  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
-    try {
-      return await fn();
-    } catch (err) {
-      lastErr = err;
-      if (!isRateLimitError(err) || attempt === maxAttempts) throw err;
-      const delay = baseDelayMs * Math.pow(2, attempt - 1);
-      await new Promise((r) => setTimeout(r, delay));
-    }
-  }
-  throw lastErr;
-}
-
-async function callGroq(
+async function callLLM(
   messages: { role: string; content: string }[],
+  base: string,
+  model: string,
+  apiKey: string,
+  extraHeaders: Record<string, string> = {},
 ): Promise<string> {
-  const apiKey = process.env.GROQ_API_KEY;
-  if (!apiKey) throw new Error("GROQ_API_KEY is not set.");
-
-  const res = await fetch(GROQ_BASE, {
+  const res = await fetch(base, {
     method: "POST",
     headers: {
       "Authorization": `Bearer ${apiKey}`,
       "Content-Type": "application/json",
+      ...extraHeaders,
     },
     body: JSON.stringify({
-      model: MODEL,
+      model,
       messages,
       max_tokens: 700,
       temperature: 0.2,
@@ -53,7 +39,7 @@ async function callGroq(
 
   if (!res.ok) {
     const body = await res.text();
-    throw new Error(`Groq error ${res.status}: ${body}`);
+    throw new Error(`${res.status}: ${body}`);
   }
 
   const data = (await res.json()) as {
@@ -61,9 +47,42 @@ async function callGroq(
     error?: { message?: string };
   };
 
-  if (data.error) throw new Error(data.error.message ?? "Unknown Groq error");
+  if (data.error) throw new Error(data.error.message ?? "Unknown error");
 
   return data.choices?.[0]?.message?.content ?? "";
+}
+
+async function callWithFallback(
+  messages: { role: string; content: string }[],
+  log: (provider: string) => void,
+): Promise<string> {
+  const groqKey = process.env.GROQ_API_KEY;
+  const openrouterKey = process.env.OPENROUTER_API_KEY;
+
+  if (groqKey) {
+    try {
+      const reply = await callLLM(messages, GROQ_BASE, GROQ_MODEL, groqKey);
+      log("groq");
+      return reply;
+    } catch (err) {
+      if (!isRateLimitError(err)) throw err;
+      // Groq rate-limited — fall through to OpenRouter
+    }
+  }
+
+  if (openrouterKey) {
+    const reply = await callLLM(
+      messages,
+      OPENROUTER_BASE,
+      OPENROUTER_MODEL,
+      openrouterKey,
+      { "HTTP-Referer": "https://syntra-intel.replit.app", "X-Title": "Syntra Intel" },
+    );
+    log("openrouter");
+    return reply;
+  }
+
+  throw new Error("No API keys available.");
 }
 
 router.post("/chat", async (req, res): Promise<void> => {
@@ -92,9 +111,10 @@ ${context}`;
       { role: "user", content: message },
     ];
 
-    const reply = await withRetry(() => callGroq(messages));
+    let provider = "unknown";
+    const reply = await callWithFallback(messages, (p) => { provider = p; });
 
-    req.log.info({ sources, model: MODEL }, "Chat response generated");
+    req.log.info({ sources, provider }, "Chat response generated");
 
     res.json(
       SendChatMessageResponse.parse({
@@ -103,9 +123,9 @@ ${context}`;
       })
     );
   } catch (err) {
-    req.log.error({ err }, "Groq API error");
+    req.log.error({ err }, "Chat API error");
     if (isRateLimitError(err)) {
-      res.status(429).json({ error: "The chatbot is temporarily busy due to high demand. Please wait a moment and try again." });
+      res.status(429).json({ error: "Both AI providers are temporarily busy. Please wait a moment and try again." });
     } else {
       res.status(500).json({ error: "Failed to generate response. Please try again." });
     }
