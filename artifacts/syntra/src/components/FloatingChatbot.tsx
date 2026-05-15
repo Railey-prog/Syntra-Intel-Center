@@ -8,47 +8,21 @@ interface Message {
   content: string;
 }
 
-type Language = "en" | "fil" | "bsy";
-
-const LANGUAGES: { code: Language; label: string; flag: string; instruction: string }[] = [
-  { code: "en", label: "EN", flag: "🇺🇸", instruction: "Respond ONLY in English." },
-  { code: "fil", label: "FIL", flag: "🇵🇭", instruction: "Sumagot LAMANG sa Filipino/Tagalog." },
-  { code: "bsy", label: "BSY", flag: "🌺", instruction: "Tubaga LAMANG sa Bisaya/Cebuano." },
+const SUGGESTED_QUESTIONS = [
+  "What are deepfakes?",
+  "How can I detect AI images?",
+  "What is the liar's dividend?",
+  "How is Meta handling AI content?",
 ];
 
-const SUGGESTED_QUESTIONS: Record<Language, string[]> = {
-  en: [
-    "What are deepfakes?",
-    "How can I detect AI images?",
-    "What is the liar's dividend?",
-    "How is Meta handling AI content?",
-  ],
-  fil: [
-    "Ano ang deepfake?",
-    "Paano matukoy ang AI na larawan?",
-    "Ano ang 'liar's dividend'?",
-    "Paano hinahawakan ng Meta ang AI content?",
-  ],
-  bsy: [
-    "Unsa man ang deepfake?",
-    "Unsaon pag-ila sa AI nga larawan?",
-    "Unsa ang 'liar's dividend'?",
-    "Unsay gibuhat sa Meta sa AI content?",
-  ],
-};
-
-const WELCOME: Record<Language, string> = {
-  en: "Hi! I'm Syntra Intel. Ask me anything about AI-generated images, deepfakes, or media literacy.",
-  fil: "Kamusta! Ako si Syntra Intel. Itanong mo sa akin ang tungkol sa AI-generated na larawan, deepfakes, o media literacy.",
-  bsy: "Kumusta! Ako si Syntra Intel. Pangutana ko bahin sa AI-generated nga mga hulagway, deepfakes, o media literacy.",
-};
+const WELCOME =
+  "Hi! I'm Syntra Intel. Ask me anything about AI-generated images, deepfakes, or media literacy — in English, Filipino, or Bisaya.";
 
 export function FloatingChatbot() {
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState("");
-  const [lang, setLang] = useState<Language>("en");
   const [messages, setMessages] = useState<Message[]>([
-    { role: "assistant", content: WELCOME.en },
+    { role: "assistant", content: WELCOME },
   ]);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -67,12 +41,6 @@ export function FloatingChatbot() {
     }
   }, [messages, mutation.isPending]);
 
-  const handleLangChange = (newLang: Language) => {
-    setLang(newLang);
-    setMessages([{ role: "assistant", content: WELCOME[newLang] }]);
-    mutation.reset();
-  };
-
   const sendMessage = (text: string) => {
     const trimmed = text.trim();
     if (!trimmed || mutation.isPending) return;
@@ -86,11 +54,8 @@ export function FloatingChatbot() {
       content: m.content,
     }));
 
-    const langConfig = LANGUAGES.find((l) => l.code === lang)!;
-    const messageWithLang = `[${langConfig.instruction}]\n${trimmed}`;
-
     mutation.mutate(
-      { data: { message: messageWithLang, history } },
+      { data: { message: trimmed, history } },
       {
         onSuccess: (data) => {
           setMessages((prev) => [
@@ -102,7 +67,7 @@ export function FloatingChatbot() {
           const status = (err as { response?: { status?: number } })?.response?.status;
           const content =
             status === 429
-              ? "Naabot na ang limitasyon ng chatbot ngayon. Subukan ulit bukas (UTC midnight).\n\nThe chatbot has reached its daily limit. Please try again after midnight (UTC).\n\nNakab-ot na ang adlaw-adlaw nga limitasyon. Palihug sulayi ugma."
+              ? "The chatbot has reached its daily limit. Please try again after midnight (UTC)."
               : "Sorry, I encountered an error. Please try again.";
           setMessages((prev) => [...prev, { role: "assistant", content }]);
         },
@@ -116,8 +81,6 @@ export function FloatingChatbot() {
       sendMessage(input);
     }
   };
-
-  const suggestions = SUGGESTED_QUESTIONS[lang];
 
   return (
     <>
@@ -145,31 +108,13 @@ export function FloatingChatbot() {
               <p className="text-xs font-bold text-foreground tracking-wide">Syntra Intel</p>
               <div className="flex items-center gap-1">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block" />
-                <p className="text-[10px] text-muted-foreground">AI Detection Assistant</p>
+                <p className="text-[10px] text-muted-foreground">AI Detection Assistant · EN / FIL / BSY</p>
               </div>
-            </div>
-
-            {/* Language selector */}
-            <div className="flex items-center gap-1 bg-slate-100 rounded-lg p-0.5">
-              {LANGUAGES.map((l) => (
-                <button
-                  key={l.code}
-                  onClick={() => handleLangChange(l.code)}
-                  className={`text-[10px] font-semibold px-2 py-1 rounded-md transition-all ${
-                    lang === l.code
-                      ? "bg-white text-primary shadow-sm"
-                      : "text-slate-500 hover:text-slate-700"
-                  }`}
-                  title={l.flag}
-                >
-                  {l.flag} {l.label}
-                </button>
-              ))}
             </div>
 
             <button
               onClick={() => setIsOpen(false)}
-              className="text-muted-foreground hover:text-foreground transition-colors ml-1"
+              className="text-muted-foreground hover:text-foreground transition-colors"
               aria-label="Minimize"
             >
               <Minus className="w-4 h-4" />
@@ -242,7 +187,7 @@ export function FloatingChatbot() {
           {/* Suggested chips */}
           {messages.length === 1 && (
             <div className="px-3 pb-2 pt-1 flex flex-wrap gap-1.5 flex-shrink-0 bg-white border-t border-slate-100">
-              {suggestions.map((q) => (
+              {SUGGESTED_QUESTIONS.map((q) => (
                 <button
                   key={q}
                   onClick={() => sendMessage(q)}
@@ -262,13 +207,7 @@ export function FloatingChatbot() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder={
-                lang === "fil"
-                  ? "Magtanong tungkol sa deepfakes..."
-                  : lang === "bsy"
-                  ? "Mangutana bahin sa deepfakes..."
-                  : "Ask about deepfakes or AI images..."
-              }
+              placeholder="Ask about deepfakes or AI images..."
               rows={1}
               className="flex-1 resize-none bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs text-foreground placeholder:text-slate-400 focus:outline-none focus:border-primary/50 focus:ring-2 focus:ring-primary/10 transition-all chatbot-scroll"
               style={{ maxHeight: "80px" }}
