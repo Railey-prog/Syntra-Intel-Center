@@ -63,6 +63,9 @@ function extractUserQuery(raw: string): string {
   return match ? match[1].trim() : raw.trim();
 }
 
+/**
+ * Score a block of text against a query using keyword frequency.
+ */
 function scoreRelevance(content: string, query: string): number {
   const normalizedQuery = query.toLowerCase();
   const normalizedContent = content.toLowerCase();
@@ -77,28 +80,109 @@ function scoreRelevance(content: string, query: string): number {
 }
 
 /**
- * Always include all 5 datasets in full, sorted by relevance (most relevant first).
- * Gemini 2.5 Flash has a 1M token context window; all 5 datasets together are ~74KB,
- * so there is no need to truncate. Truncating was the root cause of missed answers.
+ * Split dataset content into paragraphs (blocks separated by blank lines).
+ * Paragraphs shorter than minLen chars are merged with the next one.
+ */
+function splitIntoParagraphs(content: string, minLen = 150): string[] {
+  const raw = content.split(/\n{2,}/);
+  const merged: string[] = [];
+  let buffer = "";
+  for (const block of raw) {
+    const trimmed = block.trim();
+    if (!trimmed) continue;
+    buffer = buffer ? `${buffer}\n\n${trimmed}` : trimmed;
+    if (buffer.length >= minLen) {
+      merged.push(buffer);
+      buffer = "";
+    }
+  }
+  if (buffer) merged.push(buffer);
+  return merged;
+}
+
+/**
+ * Retrieve the most relevant paragraphs from all 5 datasets.
+ *
+ * Strategy:
+ * 1. Split every dataset into paragraphs.
+ * 2. Score each paragraph against the query.
+ * 3. Guarantee each dataset contributes at least its top paragraph so no
+ *    source is silenced on low-relevance queries.
+ * 4. Fill the remaining budget with the highest-scoring paragraphs across
+ *    all datasets, ranked globally.
+ * 5. Cap total context at maxChars (~30 000 chars ≈ 7 500 tokens) to
+ *    stay well within free-tier rate limits on Render / Google AI Studio.
  */
 export function retrieveRelevantContext(
   query: string,
-  // maxChars kept for API compatibility but no longer used for truncation
-  _maxChars = 12000,
+  maxChars = 30000,
 ): { context: string; sources: string[] } {
   const cleanQuery = extractUserQuery(query);
 
-  const sorted = DATASETS.map((ds) => ({
-    ds,
-    score: scoreRelevance(ds.content, cleanQuery),
-  })).sort((a, b) => b.score - a.score);
+  type ScoredParagraph = {
+    label: string;
+    text: string;
+    score: number;
+  };
+
+  const perDataset: { label: string; paragraphs: ScoredParagraph[] }[] = [];
+
+  for (const ds of DATASETS) {
+    const paragraphs = splitIntoParagraphs(ds.content);
+    const scored: ScoredParagraph[] = paragraphs.map((text) => ({
+      label: ds.label,
+      text,
+      score: scoreRelevance(text, cleanQuery),
+    }));
+    scored.sort((a, b) => b.score - a.score);
+    perDataset.push({ label: ds.label, paragraphs: scored });
+  }
+
+  const includedByLabel: Record<string, string[]> = {};
+  const includedSet = new Set<ScoredParagraph>();
+  let totalChars = 0;
+
+  // Step 1: guarantee at least the top paragraph from each dataset
+  for (const { label, paragraphs } of perDataset) {
+    if (paragraphs.length === 0) continue;
+    const top = paragraphs[0];
+    includedByLabel[label] = [top.text];
+    includedSet.add(top);
+    totalChars += top.text.length;
+  }
+
+  // Step 2: fill remaining budget with best paragraphs globally
+  const allRemaining: ScoredParagraph[] = perDataset
+    .flatMap(({ paragraphs }) => paragraphs.slice(1))
+    .filter((p) => !includedSet.has(p))
+    .sort((a, b) => b.score - a.score);
+
+  for (const p of allRemaining) {
+    if (totalChars + p.text.length > maxChars) continue;
+    if (!includedByLabel[p.label]) includedByLabel[p.label] = [];
+    includedByLabel[p.label].push(p.text);
+    includedSet.add(p);
+    totalChars += p.text.length;
+  }
+
+  // Step 3: build final context, datasets ordered by total relevance score
+  const datasetOrder = perDataset
+    .map(({ label, paragraphs }) => ({
+      label,
+      totalScore: paragraphs
+        .filter((p) => includedSet.has(p))
+        .reduce((s, p) => s + p.score, 0),
+    }))
+    .sort((a, b) => b.totalScore - a.totalScore);
 
   const usedSources: string[] = [];
   let context = "";
 
-  for (const { ds } of sorted) {
-    context += `\n\n--- SOURCE: ${ds.label} ---\n${ds.content}`;
-    usedSources.push(ds.label);
+  for (const { label } of datasetOrder) {
+    const chunks = includedByLabel[label];
+    if (!chunks || chunks.length === 0) continue;
+    context += `\n\n--- SOURCE: ${label} ---\n${chunks.join("\n\n")}`;
+    usedSources.push(label);
   }
 
   return { context: context.trim(), sources: usedSources };
