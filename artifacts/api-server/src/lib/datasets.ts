@@ -77,12 +77,14 @@ function scoreRelevance(content: string, query: string): number {
 }
 
 /**
- * Always include all 5 datasets, sorted by relevance (most relevant first).
- * Each dataset gets an equal share of the char budget.
+ * Always include all 5 datasets in full, sorted by relevance (most relevant first).
+ * Gemini 2.5 Flash has a 1M token context window; all 5 datasets together are ~74KB,
+ * so there is no need to truncate. Truncating was the root cause of missed answers.
  */
 export function retrieveRelevantContext(
   query: string,
-  maxChars = 12000,
+  // maxChars kept for API compatibility but no longer used for truncation
+  _maxChars = 12000,
 ): { context: string; sources: string[] } {
   const cleanQuery = extractUserQuery(query);
 
@@ -91,13 +93,11 @@ export function retrieveRelevantContext(
     score: scoreRelevance(ds.content, cleanQuery),
   })).sort((a, b) => b.score - a.score);
 
-  const snippetSize = Math.floor(maxChars / DATASETS.length);
   const usedSources: string[] = [];
   let context = "";
 
   for (const { ds } of sorted) {
-    const snippet = ds.content.slice(0, snippetSize);
-    context += `\n\n--- SOURCE: ${ds.label} ---\n${snippet}`;
+    context += `\n\n--- SOURCE: ${ds.label} ---\n${ds.content}`;
     usedSources.push(ds.label);
   }
 
