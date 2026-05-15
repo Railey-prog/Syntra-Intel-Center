@@ -11,7 +11,7 @@ export default function Home() {
     {
       icon: <BookOpen className="w-5 h-5 text-primary" />,
       title: "Research-Grounded Chat",
-      desc: "Ask our Groq-powered chatbot questions grounded in five peer-reviewed datasets on deepfake detection.",
+      desc: "Ask our Gemini-powered chatbot questions grounded in five peer-reviewed datasets on deepfake detection.",
     },
     {
       icon: <ShieldCheck className="w-5 h-5 text-primary" />,

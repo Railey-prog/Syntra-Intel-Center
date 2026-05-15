@@ -27,7 +27,7 @@ export function ChatbotPreview() {
           <p className="text-xs font-bold text-foreground">Syntra Intel Chat</p>
           <div className="flex items-center gap-1">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block" />
-            <p className="text-[10px] text-muted-foreground">Powered by Groq + research datasets</p>
+            <p className="text-[10px] text-muted-foreground">Powered by Gemini + research datasets</p>
           </div>
         </div>
         <span className="text-[10px] text-slate-400 font-mono bg-slate-100 px-2 py-0.5 rounded-full">preview</span>

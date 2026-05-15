@@ -85,7 +85,7 @@ function ArchitectureSection() {
             {[
               { icon: <MessageSquare className="w-3.5 h-3.5 text-primary" />, label: "User Message", desc: "Natural language query about deepfakes/AI media" },
               { icon: <Database className="w-3.5 h-3.5 text-primary" />, label: "Context Retrieval", desc: "Keyword scoring selects top 3 of 5 research datasets" },
-              { icon: <Cpu className="w-3.5 h-3.5 text-primary" />, label: "Groq LLM (llama-3.3-70b)", desc: "Generates structured response grounded in research" },
+              { icon: <Cpu className="w-3.5 h-3.5 text-primary" />, label: "Gemini (gemini-2.5-flash)", desc: "Generates structured response grounded in research" },
               { icon: <Zap className="w-3.5 h-3.5 text-primary" />, label: "Formatted Reply", desc: "Markdown response with headers, bullets & sources" },
             ].map((step, i, arr) => (
               <div key={i}>
@@ -110,7 +110,7 @@ function ArchitectureSection() {
 
           <div className="mt-4 pt-4 border-t border-slate-100">
             <p className="text-[10px] text-muted-foreground font-mono">
-              <span className="text-primary">API:</span> POST /api/chat → Groq SDK (llama-3.3-70b-versatile)
+              <span className="text-primary">API:</span> POST /api/chat → Gemini SDK (gemini-2.5-flash)
             </p>
           </div>
         </div>
@@ -205,7 +205,7 @@ export default function ThePrototype() {
                 </div>
                 <div>
                   <h2 className="font-bold text-lg text-foreground">Syntra Intel Chat</h2>
-                  <p className="text-xs text-muted-foreground font-mono">Powered by Groq + research datasets</p>
+                  <p className="text-xs text-muted-foreground font-mono">Powered by Gemini + research datasets</p>
                 </div>
               </div>
               <button
