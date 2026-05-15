@@ -1,6 +1,26 @@
 import app from "./app";
 import { logger } from "./lib/logger";
 
+const REQUIRED_ENV_VARS = [
+  { key: "GEMINI_API_KEY", alt: "AI_INTEGRATIONS_GEMINI_API_KEY", desc: "Gemini AI (chatbot)" },
+  { key: "SIGHTENGINE_API_USER", desc: "SightEngine (image analysis)" },
+  { key: "SIGHTENGINE_API_SECRET", desc: "SightEngine (image analysis)" },
+];
+
+const missing: string[] = [];
+for (const { key, alt, desc } of REQUIRED_ENV_VARS) {
+  const present = process.env[key] || (alt && process.env[alt]);
+  if (!present) {
+    missing.push(`${key} — required for ${desc}`);
+  }
+}
+
+if (missing.length > 0) {
+  logger.warn({ missing }, `⚠️  Missing environment variable(s) — some features will fail:\n${missing.map((m) => `  • ${m}`).join("\n")}`);
+} else {
+  logger.info("✅ All required environment variables are present.");
+}
+
 const rawPort = process.env["PORT"];
 
 if (!rawPort) {
