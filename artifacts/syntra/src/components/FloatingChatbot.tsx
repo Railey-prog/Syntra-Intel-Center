@@ -97,7 +97,7 @@ export function FloatingChatbot() {
       {isOpen && (
         <div
           className="fixed bottom-24 right-6 z-50 w-[340px] max-w-[calc(100vw-2rem)] rounded-2xl border border-slate-200 bg-white shadow-2xl flex flex-col overflow-hidden"
-          style={{ height: "510px" }}
+          style={{ height: "min(510px, calc(100vh - 7rem))" }}
         >
           {/* Header */}
           <div className="flex items-center gap-2.5 px-4 py-3 border-b border-slate-100 flex-shrink-0 bg-white">
