@@ -110,12 +110,12 @@ function splitIntoParagraphs(content: string, minLen = 150): string[] {
  *    source is silenced on low-relevance queries.
  * 4. Fill the remaining budget with the highest-scoring paragraphs across
  *    all datasets, ranked globally.
- * 5. Cap total context at maxChars (~30 000 chars ≈ 7 500 tokens) to
- *    stay well within free-tier rate limits on Render / Google AI Studio.
+ * 5. Cap total context at maxChars (~16 000 chars ≈ 4 000 tokens) to
+ *    stay within Groq free-tier limits (12 000 TPM).
  */
 export function retrieveRelevantContext(
   query: string,
-  maxChars = 30000,
+  maxChars = 16000,
 ): { context: string; sources: string[] } {
   const cleanQuery = extractUserQuery(query);
 

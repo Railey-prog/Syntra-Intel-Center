@@ -46,7 +46,7 @@ async function callGroq(
     body: JSON.stringify({
       model: MODEL,
       messages,
-      max_tokens: 8192,
+      max_tokens: 4096,
       temperature: 0.2,
     }),
   });
