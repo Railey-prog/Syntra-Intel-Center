@@ -7,6 +7,37 @@ const router: IRouter = Router();
 const MODEL = "arcee-ai/trinity-large-thinking:free";
 const OPENROUTER_BASE = "https://openrouter.ai/api/v1/chat/completions";
 
+/**
+ * Strips <think>...</think> blocks emitted by thinking models.
+ *
+ * Handles all observed variants:
+ *   A) "<think>internal thoughts</think>\n\nActual answer"
+ *      → keeps "Actual answer"
+ *   B) "<think>Actual answer</think>"  (whole reply wrapped in think tags)
+ *      → extracts inner content as the answer
+ *   C) "<think>unclosed tag\n Actual answer"  (no closing tag)
+ *      → strips only the lone tag, keeps the rest
+ *   D) No think tags at all → returns as-is
+ */
+function stripThinkTags(raw: string): string {
+  // Step 1: remove all complete <think>...</think> paired blocks
+  const afterPairs = raw.replace(/<think>[\s\S]*?<\/think>/gi, "").trim();
+
+  if (afterPairs.length > 0) {
+    // Content existed outside the think blocks — also clean up any stray lone tags
+    return afterPairs.replace(/<think>/gi, "").replace(/<\/think>/gi, "").trim();
+  }
+
+  // Step 2: nothing left after removing pairs → entire reply was inside a think block
+  // Extract the inner content so we don't return an empty string
+  const innerMatch = raw.match(/^[\s]*<think>([\s\S]*?)<\/think>[\s]*$/i);
+  if (innerMatch) return innerMatch[1].trim();
+
+  // Step 3: no complete pairs and no lone think tags matched above
+  // Just strip any remaining lone tags and return whatever is left
+  return raw.replace(/<think>/gi, "").replace(/<\/think>/gi, "").trim();
+}
+
 function isRateLimitError(err: unknown): boolean {
   const msg = err instanceof Error ? err.message : String(err);
   return msg.includes("429") || msg.toLowerCase().includes("quota") || msg.toLowerCase().includes("rate limit");
@@ -69,8 +100,8 @@ async function callOpenRouter(
   // Thinking models (e.g. trinity-large-thinking) may return content: null
   // with the actual answer in the `reasoning` field. Fall back to it.
   const raw = message?.content || message?.reasoning || "";
-  // Strip internal <think>...</think> blocks that thinking models emit
-  return raw.replace(/<think>[\s\S]*?<\/think>/gi, "").trim();
+
+  return stripThinkTags(raw);
 }
 
 router.post("/chat", async (req, res): Promise<void> => {
