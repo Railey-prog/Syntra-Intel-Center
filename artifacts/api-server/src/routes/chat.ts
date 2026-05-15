@@ -4,7 +4,7 @@ import { retrieveRelevantContext } from "../lib/datasets";
 
 const router: IRouter = Router();
 
-const MODEL = "deepseek/deepseek-v4-flash:free";
+const MODEL = "arcee-ai/trinity-large-thinking:free";
 const OPENROUTER_BASE = "https://openrouter.ai/api/v1/chat/completions";
 
 function isRateLimitError(err: unknown): boolean {
