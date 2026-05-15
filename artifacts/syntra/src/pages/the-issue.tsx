@@ -33,12 +33,13 @@ export default function TheIssue() {
   ];
 
   return (
-    <div className="w-full py-20 px-6">
+    <div className="w-full py-20 px-6 bg-white">
       <div className="container mx-auto max-w-5xl">
+
         {/* Header */}
         <div className="mb-16">
-          <p className="text-primary text-sm font-semibold mb-3">01. The Problem</p>
-          <h1 className="text-4xl md:text-5xl font-bold leading-tight mb-6">
+          <p className="text-primary text-xs font-bold tracking-widest uppercase mb-3">01. The Problem</p>
+          <h1 className="text-4xl md:text-5xl font-extrabold leading-tight mb-6 text-foreground">
             The growing crisis of<br /><span className="text-primary">digital misinformation.</span>
           </h1>
           <p className="text-muted-foreground text-lg max-w-2xl leading-relaxed">
@@ -51,24 +52,26 @@ export default function TheIssue() {
           {stats.map((stat, i) => (
             <div
               key={i}
-              className={`p-8 rounded-xl border transition-colors ${
+              className={`p-8 rounded-2xl border transition-all ${
                 stat.highlighted
-                  ? "bg-primary border-primary"
-                  : "bg-card border-white/8 hover:border-white/15"
+                  ? "bg-primary border-primary shadow-lg"
+                  : "bg-white border-slate-200 hover:border-primary/30 hover:shadow-md shadow-sm"
               }`}
             >
-              <div className={`w-10 h-10 rounded-lg flex items-center justify-center mb-5 ${
-                stat.highlighted ? "bg-primary-foreground/10" : "bg-secondary"
+              <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-5 ${
+                stat.highlighted ? "bg-white/15" : "bg-primary/10 border border-primary/15"
               }`}>
-                {stat.icon}
+                {stat.highlighted
+                  ? <Users className="w-6 h-6 text-white" />
+                  : stat.icon}
               </div>
-              <p className={`text-4xl font-bold mb-2 ${stat.highlighted ? "text-primary-foreground" : "text-foreground"}`}>
+              <p className={`text-4xl font-extrabold mb-2 ${stat.highlighted ? "text-white" : "text-foreground"}`}>
                 {stat.value}
               </p>
-              <p className={`text-sm leading-relaxed mb-3 ${stat.highlighted ? "text-primary-foreground/80" : "text-muted-foreground"}`}>
+              <p className={`text-sm leading-relaxed mb-3 ${stat.highlighted ? "text-white/85" : "text-muted-foreground"}`}>
                 {stat.label}
               </p>
-              <p className={`text-xs ${stat.highlighted ? "text-primary-foreground/50" : "text-muted-foreground/50"}`}>
+              <p className={`text-xs ${stat.highlighted ? "text-white/55" : "text-muted-foreground/60"}`}>
                 — {stat.source}
               </p>
             </div>
@@ -76,9 +79,9 @@ export default function TheIssue() {
         </div>
 
         {/* Research context */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start bg-slate-50 rounded-3xl p-10 border border-slate-100">
           <div>
-            <h2 className="text-2xl font-bold mb-6">
+            <h2 className="text-2xl font-bold mb-5 text-foreground">
               The <span className="text-primary">Research</span> Context
             </h2>
             <div className="space-y-4 text-muted-foreground text-sm leading-relaxed">
@@ -91,7 +94,7 @@ export default function TheIssue() {
             </div>
           </div>
           <div>
-            <h2 className="text-2xl font-bold mb-6">
+            <h2 className="text-2xl font-bold mb-5 text-foreground">
               Why It <span className="text-primary">Matters</span>
             </h2>
             <div className="space-y-4 text-muted-foreground text-sm leading-relaxed">
@@ -104,6 +107,7 @@ export default function TheIssue() {
             </div>
           </div>
         </div>
+
       </div>
     </div>
   );

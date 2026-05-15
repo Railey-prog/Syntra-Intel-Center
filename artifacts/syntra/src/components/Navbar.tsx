@@ -15,7 +15,7 @@ export function Navbar() {
   ];
 
   return (
-    <nav className="sticky top-0 z-50 w-full border-b border-white/5 bg-background/80 backdrop-blur">
+    <nav className="sticky top-0 z-50 w-full border-b border-slate-100 bg-white/95 backdrop-blur shadow-sm">
       <div className="container mx-auto px-6 h-16 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2">
           <ScanSearch className="w-5 h-5 text-primary" />
@@ -32,7 +32,7 @@ export function Navbar() {
               href={link.href}
               className={`text-sm transition-colors ${
                 location === link.href
-                  ? "text-foreground font-medium"
+                  ? "text-foreground font-semibold"
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
@@ -44,7 +44,7 @@ export function Navbar() {
         <div className="hidden md:flex items-center">
           <button
             onClick={() => window.dispatchEvent(new CustomEvent("openSyntraChat"))}
-            className="px-5 py-2 rounded-md bg-primary text-primary-foreground text-sm font-semibold hover:bg-primary/90 transition-colors neon-glow"
+            className="px-5 py-2 rounded-full bg-primary text-primary-foreground text-sm font-semibold hover:bg-primary/90 transition-all neon-glow"
           >
             Try Chatbot
           </button>
@@ -61,7 +61,7 @@ export function Navbar() {
 
       {/* Mobile Nav */}
       {isMobileMenuOpen && (
-        <div className="md:hidden border-t border-white/5 bg-background/95">
+        <div className="md:hidden border-t border-slate-100 bg-white">
           <div className="flex flex-col py-4 px-6 gap-4">
             {links.map((link) => (
               <Link
@@ -69,7 +69,7 @@ export function Navbar() {
                 href={link.href}
                 onClick={() => setIsMobileMenuOpen(false)}
                 className={`text-sm ${
-                  location === link.href ? "text-foreground font-medium" : "text-muted-foreground"
+                  location === link.href ? "text-foreground font-semibold" : "text-muted-foreground"
                 }`}
               >
                 {link.label}
@@ -80,7 +80,7 @@ export function Navbar() {
                 setIsMobileMenuOpen(false);
                 window.dispatchEvent(new CustomEvent("openSyntraChat"));
               }}
-              className="mt-2 w-full px-5 py-2 rounded-md bg-primary text-primary-foreground text-sm font-semibold"
+              className="mt-2 w-full px-5 py-2 rounded-full bg-primary text-primary-foreground text-sm font-semibold neon-glow"
             >
               Try Chatbot
             </button>

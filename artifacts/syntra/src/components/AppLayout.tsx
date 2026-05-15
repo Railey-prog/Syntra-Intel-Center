@@ -20,9 +20,8 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-border/40 bg-background">
-        {/* Top row: logo + nav links */}
-        <div className="container mx-auto px-6 py-6 flex flex-col md:flex-row items-center justify-between gap-4 border-b border-white/5">
+      <footer className="border-t border-slate-100 bg-slate-50">
+        <div className="container mx-auto px-6 py-6 flex flex-col md:flex-row items-center justify-between gap-4 border-b border-slate-100">
           <Link href="/" className="flex items-center gap-2">
             <ScanSearch className="w-4 h-4 text-primary" />
             <span className="font-bold text-sm text-foreground tracking-tight">
@@ -42,13 +41,11 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
             ))}
           </nav>
         </div>
-
-        {/* Bottom: copyright + powered by */}
         <div className="container mx-auto px-6 py-6 text-center space-y-2">
           <p className="text-muted-foreground text-xs">
             © 2026 Syntra. Built for awareness and education.
           </p>
-          <p className="text-muted-foreground/60 text-xs max-w-xl mx-auto">
+          <p className="text-muted-foreground/70 text-xs max-w-xl mx-auto">
             <span className="font-semibold text-muted-foreground">Powered by:</span>{" "}
             Syntra combines AI detection with expert knowledge to expose synthetic media and build media literacy in a world where seeing is no longer believing.
           </p>
