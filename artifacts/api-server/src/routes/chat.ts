@@ -1,32 +1,29 @@
 import { Router, type IRouter } from "express";
-import Groq from "groq-sdk";
+import { GoogleGenAI } from "@google/genai";
 import { SendChatMessageBody, SendChatMessageResponse } from "@workspace/api-zod";
 import { retrieveRelevantContext } from "../lib/datasets";
 
 const router: IRouter = Router();
 
-const MODELS = [
-  "llama-3.3-70b-versatile",
-];
+const MODEL = "gemini-2.5-flash";
 
-let _groq: Groq | null = null;
-function getGroq(): Groq {
-  if (!_groq) {
-    if (!process.env.GROQ_API_KEY) {
-      throw new Error("GROQ_API_KEY environment variable is not set.");
+let _ai: GoogleGenAI | null = null;
+function getAI(): GoogleGenAI {
+  if (!_ai) {
+    const apiKey = process.env.AI_INTEGRATIONS_GEMINI_API_KEY;
+    const baseUrl = process.env.AI_INTEGRATIONS_GEMINI_BASE_URL;
+    if (!apiKey || !baseUrl) {
+      throw new Error("Gemini AI Integrations environment variables are not set.");
     }
-    _groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
+    _ai = new GoogleGenAI({
+      apiKey,
+      httpOptions: {
+        apiVersion: "",
+        baseUrl,
+      },
+    });
   }
-  return _groq;
-}
-
-function isRateLimitError(err: unknown): boolean {
-  return (
-    typeof err === "object" &&
-    err !== null &&
-    "status" in err &&
-    (err as { status: number }).status === 429
-  );
+  return _ai;
 }
 
 router.post("/chat", async (req, res): Promise<void> => {
@@ -81,55 +78,38 @@ CITATION & FORMAT RULES
 - Keep responses concise: 3–5 sections maximum
 - End with **Key Takeaway:** summarizing the main finding in the user's language`;
 
-    const messages: Groq.Chat.ChatCompletionMessageParam[] = [
-      { role: "system", content: systemPrompt },
+    const contents = [
       ...history.map((h) => ({
-        role: h.role as "user" | "assistant",
-        content: h.content,
+        role: h.role as "user" | "model",
+        parts: [{ text: h.content }],
       })),
-      { role: "user", content: message },
+      { role: "user" as const, parts: [{ text: message }] },
     ];
 
-    let lastErr: unknown;
-    for (const model of MODELS) {
-      try {
-        const completion = await getGroq().chat.completions.create({
-          model,
-          messages,
-          max_tokens: 768,
-          temperature: 0.2,
-        });
-
-        const reply =
-          completion.choices[0]?.message?.content ??
-          "I could not generate a response. Please try again.";
-
-        req.log.info({ sources, model }, "Chat response generated");
-
-        res.json(
-          SendChatMessageResponse.parse({
-            reply,
-            sources,
-          })
-        );
-        return;
-      } catch (err) {
-        if (isRateLimitError(err)) {
-          req.log.warn({ model }, `Rate limit hit for ${model}, trying next model`);
-          lastErr = err;
-          continue;
-        }
-        throw err;
-      }
-    }
-
-    req.log.error({ lastErr }, "All models rate limited");
-    res.status(429).json({
-      error:
-        "The chatbot has reached its daily usage limit. Please try again after midnight (UTC). / Naabot na ang limitasyon ngayon. Subukan ulit bukas. / Nakab-ot na ang adlaw-adlaw nga limitasyon. Palihug sulayi ugma.",
+    const response = await getAI().models.generateContent({
+      model: MODEL,
+      contents,
+      config: {
+        systemInstruction: systemPrompt,
+        maxOutputTokens: 8192,
+        temperature: 0.2,
+      },
     });
+
+    const reply =
+      response.text ??
+      "I could not generate a response. Please try again.";
+
+    req.log.info({ sources, model: MODEL }, "Chat response generated");
+
+    res.json(
+      SendChatMessageResponse.parse({
+        reply,
+        sources,
+      })
+    );
   } catch (err) {
-    req.log.error({ err }, "Groq API error");
+    req.log.error({ err }, "Gemini API error");
     res.status(500).json({ error: "Failed to generate response. Please try again." });
   }
 });
