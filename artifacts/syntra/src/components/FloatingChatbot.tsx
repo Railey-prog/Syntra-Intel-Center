@@ -9,10 +9,10 @@ interface Message {
 }
 
 const SUGGESTED_QUESTIONS = [
-  "Can humans tell AI faces from real ones?",
-  "What is the liar's dividend?",
-  "Why do attractive faces seem more real to us?",
-  "How much of social media is AI-generated?",
+  "What is a deepfake?",
+  "How does misinformation spread?",
+  "How do I protect myself online?",
+  "How do I fact-check a news article?",
 ];
 
 const WELCOME =

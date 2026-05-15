@@ -9,10 +9,10 @@ const SAMPLE_MESSAGES = [
 ];
 
 const SUGGESTED_QUESTIONS = [
-  "What are deepfakes?",
-  "How can I detect AI images?",
-  "What is the liar's dividend?",
-  "How is Meta handling AI content?",
+  "What is a deepfake?",
+  "How does misinformation spread?",
+  "How do I protect myself online?",
+  "How do I fact-check a news article?",
 ];
 
 export function ChatbotPreview() {
