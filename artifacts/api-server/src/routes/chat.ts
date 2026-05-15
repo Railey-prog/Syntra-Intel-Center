@@ -4,33 +4,79 @@ import { retrieveRelevantContext } from "../lib/datasets";
 
 const router: IRouter = Router();
 
-const GROQ_MODEL = "llama-3.3-70b-versatile";
 const GROQ_BASE = "https://api.groq.com/openai/v1/chat/completions";
-
-const OPENROUTER_MODEL = "meta-llama/llama-3.3-70b-instruct:free";
 const OPENROUTER_BASE = "https://openrouter.ai/api/v1/chat/completions";
+const OR_HEADERS = {
+  "HTTP-Referer": "https://syntra-intel.replit.app",
+  "X-Title": "Syntra Intel",
+};
+
+interface Provider {
+  name: string;
+  base: string;
+  model: string;
+  keyEnv: string;
+  extraHeaders?: Record<string, string>;
+}
+
+const PROVIDERS: Provider[] = [
+  {
+    name: "groq",
+    base: GROQ_BASE,
+    model: "llama-3.3-70b-versatile",
+    keyEnv: "GROQ_API_KEY",
+  },
+  {
+    name: "openrouter/gemma",
+    base: OPENROUTER_BASE,
+    model: "google/gemma-3-27b-it:free",
+    keyEnv: "OPENROUTER_API_KEY",
+    extraHeaders: OR_HEADERS,
+  },
+  {
+    name: "openrouter/llama",
+    base: OPENROUTER_BASE,
+    model: "meta-llama/llama-3.3-70b-instruct:free",
+    keyEnv: "OPENROUTER_API_KEY",
+    extraHeaders: OR_HEADERS,
+  },
+  {
+    name: "openrouter/mistral",
+    base: OPENROUTER_BASE,
+    model: "mistralai/mistral-7b-instruct:free",
+    keyEnv: "OPENROUTER_API_KEY",
+    extraHeaders: OR_HEADERS,
+  },
+  {
+    name: "openrouter/deepseek",
+    base: OPENROUTER_BASE,
+    model: "deepseek/deepseek-chat-v3-0324:free",
+    keyEnv: "OPENROUTER_API_KEY",
+    extraHeaders: OR_HEADERS,
+  },
+];
 
 function isRateLimitError(err: unknown): boolean {
   const msg = err instanceof Error ? err.message : String(err);
-  return msg.includes("429") || msg.toLowerCase().includes("quota") || msg.toLowerCase().includes("rate limit");
+  return msg.startsWith("429") || msg.toLowerCase().includes("rate limit") || msg.toLowerCase().includes("quota");
 }
 
 async function callLLM(
   messages: { role: string; content: string }[],
-  base: string,
-  model: string,
-  apiKey: string,
-  extraHeaders: Record<string, string> = {},
+  provider: Provider,
 ): Promise<string> {
-  const res = await fetch(base, {
+  const apiKey = process.env[provider.keyEnv];
+  if (!apiKey) throw new Error(`Missing env var ${provider.keyEnv}`);
+
+  const res = await fetch(provider.base, {
     method: "POST",
     headers: {
       "Authorization": `Bearer ${apiKey}`,
       "Content-Type": "application/json",
-      ...extraHeaders,
+      ...provider.extraHeaders,
     },
     body: JSON.stringify({
-      model,
+      model: provider.model,
       messages,
       max_tokens: 700,
       temperature: 0.2,
@@ -54,35 +100,23 @@ async function callLLM(
 
 async function callWithFallback(
   messages: { role: string; content: string }[],
-  log: (provider: string) => void,
-): Promise<string> {
-  const groqKey = process.env.GROQ_API_KEY;
-  const openrouterKey = process.env.OPENROUTER_API_KEY;
+): Promise<{ reply: string; provider: string }> {
+  const errors: string[] = [];
 
-  if (groqKey) {
+  for (const provider of PROVIDERS) {
     try {
-      const reply = await callLLM(messages, GROQ_BASE, GROQ_MODEL, groqKey);
-      log("groq");
-      return reply;
+      const reply = await callLLM(messages, provider);
+      return { reply, provider: provider.name };
     } catch (err) {
-      if (!isRateLimitError(err)) throw err;
-      // Groq rate-limited — fall through to OpenRouter
+      const msg = err instanceof Error ? err.message : String(err);
+      errors.push(`${provider.name}: ${msg.slice(0, 120)}`);
+      if (!isRateLimitError(err)) {
+        throw err;
+      }
     }
   }
 
-  if (openrouterKey) {
-    const reply = await callLLM(
-      messages,
-      OPENROUTER_BASE,
-      OPENROUTER_MODEL,
-      openrouterKey,
-      { "HTTP-Referer": "https://syntra-intel.replit.app", "X-Title": "Syntra Intel" },
-    );
-    log("openrouter");
-    return reply;
-  }
-
-  throw new Error("No API keys available.");
+  throw new Error(`All providers rate-limited.\n${errors.join("\n")}`);
 }
 
 router.post("/chat", async (req, res): Promise<void> => {
@@ -111,8 +145,7 @@ ${context}`;
       { role: "user", content: message },
     ];
 
-    let provider = "unknown";
-    const reply = await callWithFallback(messages, (p) => { provider = p; });
+    const { reply, provider } = await callWithFallback(messages);
 
     req.log.info({ sources, provider }, "Chat response generated");
 
@@ -125,7 +158,7 @@ ${context}`;
   } catch (err) {
     req.log.error({ err }, "Chat API error");
     if (isRateLimitError(err)) {
-      res.status(429).json({ error: "Both AI providers are temporarily busy. Please wait a moment and try again." });
+      res.status(429).json({ error: "All AI providers are temporarily busy. Please wait a moment and try again." });
     } else {
       res.status(500).json({ error: "Failed to generate response. Please try again." });
     }
