@@ -68,7 +68,9 @@ async function callOpenRouter(
   const message = data.choices?.[0]?.message;
   // Thinking models (e.g. trinity-large-thinking) may return content: null
   // with the actual answer in the `reasoning` field. Fall back to it.
-  return message?.content || message?.reasoning || "";
+  const raw = message?.content || message?.reasoning || "";
+  // Strip internal <think>...</think> blocks that thinking models emit
+  return raw.replace(/<think>[\s\S]*?<\/think>/gi, "").trim();
 }
 
 router.post("/chat", async (req, res): Promise<void> => {
