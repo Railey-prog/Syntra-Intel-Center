@@ -3,6 +3,30 @@ import { GoogleGenAI } from "@google/genai";
 import { SendChatMessageBody, SendChatMessageResponse } from "@workspace/api-zod";
 import { retrieveRelevantContext } from "../lib/datasets";
 
+function isRateLimitError(err: unknown): boolean {
+  const msg = err instanceof Error ? err.message : String(err);
+  return msg.includes("429") || msg.toLowerCase().includes("quota") || msg.toLowerCase().includes("rate limit");
+}
+
+async function withRetry<T>(
+  fn: () => Promise<T>,
+  maxAttempts = 3,
+  baseDelayMs = 2000,
+): Promise<T> {
+  let lastErr: unknown;
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    try {
+      return await fn();
+    } catch (err) {
+      lastErr = err;
+      if (!isRateLimitError(err) || attempt === maxAttempts) throw err;
+      const delay = baseDelayMs * Math.pow(2, attempt - 1); // 2s, 4s, 8s
+      await new Promise((r) => setTimeout(r, delay));
+    }
+  }
+  throw lastErr;
+}
+
 const router: IRouter = Router();
 
 const MODEL = "gemini-2.5-flash";
@@ -92,15 +116,17 @@ CITATION & FORMAT RULES
       { role: "user" as const, parts: [{ text: message }] },
     ];
 
-    const response = await getAI().models.generateContent({
-      model: MODEL,
-      contents,
-      config: {
-        systemInstruction: systemPrompt,
-        maxOutputTokens: 8192,
-        temperature: 0.2,
-      },
-    });
+    const response = await withRetry(() =>
+      getAI().models.generateContent({
+        model: MODEL,
+        contents,
+        config: {
+          systemInstruction: systemPrompt,
+          maxOutputTokens: 8192,
+          temperature: 0.2,
+        },
+      })
+    );
 
     const reply =
       response.text ??
@@ -116,7 +142,11 @@ CITATION & FORMAT RULES
     );
   } catch (err) {
     req.log.error({ err }, "Gemini API error");
-    res.status(500).json({ error: "Failed to generate response. Please try again." });
+    if (isRateLimitError(err)) {
+      res.status(429).json({ error: "The chatbot is temporarily busy due to high demand. Please wait a moment and try again." });
+    } else {
+      res.status(500).json({ error: "Failed to generate response. Please try again." });
+    }
   }
 });
 
