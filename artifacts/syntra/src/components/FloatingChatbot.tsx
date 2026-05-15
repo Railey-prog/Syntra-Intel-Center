@@ -10,9 +10,9 @@ interface Message {
 
 const SUGGESTED_QUESTIONS = [
   "What is a deepfake?",
-  "How does misinformation spread?",
-  "How do I protect myself online?",
-  "How do I fact-check a news article?",
+  "How does misinformation spread on social media?",
+  "How do I protect myself from deepfakes?",
+  "How do I fact-check AI-generated content?",
 ];
 
 const WELCOME =
