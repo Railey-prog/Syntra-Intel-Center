@@ -1,0 +1,29 @@
+services:
+  - type: web
+    name: syntra
+    runtime: node
+    region: oregon
+    plan: free
+    buildCommand: pnpm install && PORT=3000 BASE_PATH=/ pnpm --filter @workspace/syntra run build && pnpm --filter @workspace/api-server run build
+    startCommand: NODE_ENV=production pnpm --filter @workspace/api-server run start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 8080
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: SIGHTENGINE_API_USER
+        sync: false
+      - key: SIGHTENGINE_API_SECRET
+        sync: false
+      - key: DATABASE_URL
+        fromDatabase:
+          name: syntra-db
+          property: connectionString
+
+databases:
+  - name: syntra-db
+    databaseName: syntra
+    plan: free

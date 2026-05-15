@@ -10,17 +10,22 @@ const MODEL = "gemini-2.5-flash";
 let _ai: GoogleGenAI | null = null;
 function getAI(): GoogleGenAI {
   if (!_ai) {
-    const apiKey = process.env.AI_INTEGRATIONS_GEMINI_API_KEY;
+    // Support both: Replit AI Integrations proxy and a standard Google AI Studio key
+    const apiKey =
+      process.env.GEMINI_API_KEY ?? process.env.AI_INTEGRATIONS_GEMINI_API_KEY;
     const baseUrl = process.env.AI_INTEGRATIONS_GEMINI_BASE_URL;
-    if (!apiKey || !baseUrl) {
-      throw new Error("Gemini AI Integrations environment variables are not set.");
+
+    if (!apiKey) {
+      throw new Error(
+        "No Gemini API key found. Set GEMINI_API_KEY (Google AI Studio) or AI_INTEGRATIONS_GEMINI_API_KEY."
+      );
     }
+
     _ai = new GoogleGenAI({
       apiKey,
-      httpOptions: {
-        apiVersion: "",
-        baseUrl,
-      },
+      ...(baseUrl
+        ? { httpOptions: { apiVersion: "", baseUrl } }
+        : {}),
     });
   }
   return _ai;
