@@ -9,10 +9,10 @@ interface Message {
 }
 
 const SUGGESTED_QUESTIONS = [
-  "What are deepfakes?",
-  "How can I detect AI images?",
+  "Can humans tell AI faces from real ones?",
   "What is the liar's dividend?",
-  "How is Meta handling AI content?",
+  "Why do attractive faces seem more real to us?",
+  "How much of social media is AI-generated?",
 ];
 
 const WELCOME =
