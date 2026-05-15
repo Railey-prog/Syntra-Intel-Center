@@ -85,7 +85,8 @@ CITATION & FORMAT RULES
 
     const contents = [
       ...history.map((h) => ({
-        role: h.role as "user" | "model",
+        // Gemini only accepts "user" or "model" — map "assistant" → "model"
+        role: (h.role === "assistant" ? "model" : h.role) as "user" | "model",
         parts: [{ text: h.content }],
       })),
       { role: "user" as const, parts: [{ text: message }] },
