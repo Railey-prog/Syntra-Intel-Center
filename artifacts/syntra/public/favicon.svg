@@ -4,17 +4,17 @@
 
   <!-- Corner brackets (viewfinder / ScanSearch style) -->
   <!-- Top-left -->
-  <path d="M36 68 L36 36 L68 36" stroke="#CBFF00" stroke-width="11" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <path d="M36 68 L36 36 L68 36" stroke="#3B82F6" stroke-width="11" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
   <!-- Top-right -->
-  <path d="M112 36 L144 36 L144 68" stroke="#CBFF00" stroke-width="11" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <path d="M112 36 L144 36 L144 68" stroke="#3B82F6" stroke-width="11" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
   <!-- Bottom-left -->
-  <path d="M36 112 L36 144 L68 144" stroke="#CBFF00" stroke-width="11" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <path d="M36 112 L36 144 L68 144" stroke="#3B82F6" stroke-width="11" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
   <!-- Bottom-right -->
-  <path d="M112 144 L144 144 L144 112" stroke="#CBFF00" stroke-width="11" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <path d="M112 144 L144 144 L144 112" stroke="#3B82F6" stroke-width="11" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
 
   <!-- Magnifying glass circle -->
-  <circle cx="86" cy="86" r="20" stroke="#CBFF00" stroke-width="10" fill="none"/>
+  <circle cx="86" cy="86" r="20" stroke="#3B82F6" stroke-width="10" fill="none"/>
 
   <!-- Magnifying glass handle -->
-  <line x1="101" y1="101" x2="116" y2="116" stroke="#CBFF00" stroke-width="10" stroke-linecap="round"/>
+  <line x1="101" y1="101" x2="116" y2="116" stroke="#3B82F6" stroke-width="10" stroke-linecap="round"/>
 </svg>
