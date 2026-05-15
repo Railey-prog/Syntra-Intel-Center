@@ -18,7 +18,7 @@ export function Navbar() {
     <nav className="sticky top-0 z-50 w-full border-b border-slate-100 bg-white/95 backdrop-blur shadow-sm">
       <div className="container mx-auto px-6 h-16 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2">
-          <ScanSearch className="w-5 h-5 text-primary" />
+          <ScanSearch className="w-5 h-5 text-blue-500" />
           <span className="font-bold text-lg text-primary tracking-tight">
             SYNTRA<span className="text-primary">.</span>
           </span>
