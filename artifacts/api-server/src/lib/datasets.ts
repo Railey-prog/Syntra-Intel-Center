@@ -50,13 +50,17 @@ const DATASETS: DatasetEntry[] = [
   },
 ];
 
+function escapeRegex(str: string): string {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
 function scoreRelevance(content: string, query: string): number {
   const normalizedQuery = query.toLowerCase();
   const normalizedContent = content.toLowerCase();
   const words = normalizedQuery.split(/\s+/).filter((w) => w.length > 3);
   let score = 0;
   for (const word of words) {
-    const regex = new RegExp(word, "gi");
+    const regex = new RegExp(escapeRegex(word), "gi");
     const matches = normalizedContent.match(regex);
     if (matches) score += matches.length;
   }
