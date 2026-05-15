@@ -56,19 +56,19 @@ export function ChatbotPreview() {
             <div className={`max-w-[82%] px-3 py-2.5 rounded-2xl text-sm leading-relaxed shadow-sm ${
               msg.role === "user"
                 ? "bg-primary text-white rounded-br-sm"
-                : "bg-white border border-slate-200 text-foreground rounded-bl-sm"
+                : "bg-[#0f1623] border border-slate-700/60 text-white rounded-bl-sm"
             }`}>
               {msg.role === "assistant" ? (
                 <div className="space-y-1.5">
                   {msg.content.split("\n").map((line, j) => {
                     if (!line.trim()) return null;
                     const html = line
-                      .replace(/\*\*(.*?)\*\*/g, '<strong class="text-primary font-semibold">$1</strong>')
-                      .replace(/\*(.*?)\*/g, '<em class="text-slate-500">$1</em>');
-                    if (line.startsWith("— ")) {
-                      return <p key={j} className="flex gap-1.5 text-xs text-slate-700"><span className="text-primary flex-shrink-0">—</span><span dangerouslySetInnerHTML={{ __html: html.slice(2) }} /></p>;
+                      .replace(/\*\*(.*?)\*\*/g, '<strong class="text-amber-400 font-semibold">$1</strong>')
+                      .replace(/\*(.*?)\*/g, '<em class="text-slate-400 text-[10px]">$1</em>');
+                    if (line.startsWith("— ") || line.startsWith("- ")) {
+                      return <p key={j} className="flex gap-1.5 text-xs text-slate-200"><span className="text-amber-400 flex-shrink-0">•</span><span dangerouslySetInnerHTML={{ __html: html.replace(/^[—\-] /, "") }} /></p>;
                     }
-                    return <p key={j} className="text-xs text-slate-700" dangerouslySetInnerHTML={{ __html: html }} />;
+                    return <p key={j} className="text-xs text-slate-200" dangerouslySetInnerHTML={{ __html: html }} />;
                   })}
                 </div>
               ) : (
