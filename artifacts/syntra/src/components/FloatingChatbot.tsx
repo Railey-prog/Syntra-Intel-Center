@@ -64,11 +64,13 @@ export function FloatingChatbot() {
             { role: "assistant", content: data.reply },
           ]);
         },
-        onError: () => {
-          setMessages((prev) => [
-            ...prev,
-            { role: "assistant", content: "Sorry, I encountered an error. Please try again." },
-          ]);
+        onError: (err: unknown) => {
+          const status = (err as { response?: { status?: number } })?.response?.status;
+          const content =
+            status === 429
+              ? "Naabot na ang limitasyon ng chatbot ngayon. Subukan ulit bukas (UTC midnight).\n\nThe chatbot has reached its daily limit. Please try again after midnight (UTC).\n\nNakab-ot na ang adlaw-adlaw nga limitasyon. Palihug sulayi ugma."
+              : "Sorry, I encountered an error. Please try again.";
+          setMessages((prev) => [...prev, { role: "assistant", content }]);
         },
       }
     );

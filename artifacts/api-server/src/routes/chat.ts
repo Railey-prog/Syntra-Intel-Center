@@ -5,6 +5,11 @@ import { retrieveRelevantContext } from "../lib/datasets";
 
 const router: IRouter = Router();
 
+const MODELS = [
+  "llama-3.3-70b-versatile",
+  "llama-3.1-8b-instant",
+];
+
 let _groq: Groq | null = null;
 function getGroq(): Groq {
   if (!_groq) {
@@ -14,6 +19,15 @@ function getGroq(): Groq {
     _groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
   }
   return _groq;
+}
+
+function isRateLimitError(err: unknown): boolean {
+  return (
+    typeof err === "object" &&
+    err !== null &&
+    "status" in err &&
+    (err as { status: number }).status === 429
+  );
 }
 
 router.post("/chat", async (req, res): Promise<void> => {
@@ -30,7 +44,7 @@ router.post("/chat", async (req, res): Promise<void> => {
 
     const systemPrompt = `You are Syntra Intel — an AI assistant that answers ONLY using the five peer-reviewed research datasets provided below. You have no other knowledge source.
 
-Reply in the same language the user writes in.
+Reply in the same language the user writes in. If the user writes in Filipino (Tagalog), reply in Filipino. If the user writes in Bisaya (Cebuano), reply in Bisaya. If the user writes in English, reply in English.
 
 ═══════════════════════════════════════════
 DATASET-ONLY RULE — NON-NEGOTIABLE
@@ -38,8 +52,7 @@ DATASET-ONLY RULE — NON-NEGOTIABLE
 You may ONLY answer a question if the answer is directly supported by the dataset excerpts below.
 
 - If the excerpts contain relevant information → answer, citing every fact.
-- If the excerpts do NOT contain enough information to answer → refuse with:
-  "I can only answer based on the five research datasets loaded into Syntra. The datasets don't contain enough information to answer this question. Please ask something about AI-generated images, deepfakes, media literacy, or the social impact of synthetic media."
+- If the excerpts do NOT contain enough information to answer → refuse in the same language the user wrote in.
 - NEVER use your training data, general world knowledge, or any source outside these excerpts to answer any question — even if you are confident in the answer.
 - NEVER guess, infer, or extrapolate beyond what is explicitly written in the excerpts.
 
@@ -67,23 +80,44 @@ CITATION & FORMAT RULES
       { role: "user", content: message },
     ];
 
-    const completion = await getGroq().chat.completions.create({
-      model: "llama-3.1-8b-instant",
-      messages,
-      max_tokens: 768,
-      temperature: 0.7,
+    let lastErr: unknown;
+    for (const model of MODELS) {
+      try {
+        const completion = await getGroq().chat.completions.create({
+          model,
+          messages,
+          max_tokens: 768,
+          temperature: 0.7,
+        });
+
+        const reply =
+          completion.choices[0]?.message?.content ??
+          "I could not generate a response. Please try again.";
+
+        req.log.info({ sources, model }, "Chat response generated");
+
+        res.json(
+          SendChatMessageResponse.parse({
+            reply,
+            sources,
+          })
+        );
+        return;
+      } catch (err) {
+        if (isRateLimitError(err)) {
+          req.log.warn({ model }, `Rate limit hit for ${model}, trying next model`);
+          lastErr = err;
+          continue;
+        }
+        throw err;
+      }
+    }
+
+    req.log.error({ lastErr }, "All models rate limited");
+    res.status(429).json({
+      error:
+        "The chatbot has reached its daily usage limit. Please try again after midnight (UTC). / Naabot na ang limitasyon ngayon. Subukan ulit bukas. / Nakab-ot na ang adlaw-adlaw nga limitasyon. Palihug sulayi ugma.",
     });
-
-    const reply = completion.choices[0]?.message?.content ?? "I could not generate a response. Please try again.";
-
-    req.log.info({ sources }, "Chat response generated");
-
-    res.json(
-      SendChatMessageResponse.parse({
-        reply,
-        sources,
-      })
-    );
   } catch (err) {
     req.log.error({ err }, "Groq API error");
     res.status(500).json({ error: "Failed to generate response. Please try again." });
