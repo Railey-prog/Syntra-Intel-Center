@@ -8,22 +8,47 @@ interface Message {
   content: string;
 }
 
-const SUGGESTED_QUESTIONS = [
-  "What are deepfakes?",
-  "How can I detect AI images?",
-  "What is the liar's dividend?",
-  "How is Meta handling AI content?",
+type Language = "en" | "fil" | "bsy";
+
+const LANGUAGES: { code: Language; label: string; flag: string; instruction: string }[] = [
+  { code: "en", label: "EN", flag: "🇺🇸", instruction: "Respond ONLY in English." },
+  { code: "fil", label: "FIL", flag: "🇵🇭", instruction: "Sumagot LAMANG sa Filipino/Tagalog." },
+  { code: "bsy", label: "BSY", flag: "🌺", instruction: "Tubaga LAMANG sa Bisaya/Cebuano." },
 ];
+
+const SUGGESTED_QUESTIONS: Record<Language, string[]> = {
+  en: [
+    "What are deepfakes?",
+    "How can I detect AI images?",
+    "What is the liar's dividend?",
+    "How is Meta handling AI content?",
+  ],
+  fil: [
+    "Ano ang deepfake?",
+    "Paano matukoy ang AI na larawan?",
+    "Ano ang 'liar's dividend'?",
+    "Paano hinahawakan ng Meta ang AI content?",
+  ],
+  bsy: [
+    "Unsa man ang deepfake?",
+    "Unsaon pag-ila sa AI nga larawan?",
+    "Unsa ang 'liar's dividend'?",
+    "Unsay gibuhat sa Meta sa AI content?",
+  ],
+};
+
+const WELCOME: Record<Language, string> = {
+  en: "Hi! I'm Syntra Intel. Ask me anything about AI-generated images, deepfakes, or media literacy.",
+  fil: "Kamusta! Ako si Syntra Intel. Itanong mo sa akin ang tungkol sa AI-generated na larawan, deepfakes, o media literacy.",
+  bsy: "Kumusta! Ako si Syntra Intel. Pangutana ko bahin sa AI-generated nga mga hulagway, deepfakes, o media literacy.",
+};
 
 export function FloatingChatbot() {
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState("");
+  const [lang, setLang] = useState<Language>("en");
   const [messages, setMessages] = useState<Message[]>([
-    {
-      role: "assistant",
-      content:
-        "Hi! I'm Syntra Intel. Ask me anything about AI-generated images, deepfakes, or media literacy.",
-    },
+    { role: "assistant", content: WELCOME.en },
   ]);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -42,6 +67,12 @@ export function FloatingChatbot() {
     }
   }, [messages, mutation.isPending]);
 
+  const handleLangChange = (newLang: Language) => {
+    setLang(newLang);
+    setMessages([{ role: "assistant", content: WELCOME[newLang] }]);
+    mutation.reset();
+  };
+
   const sendMessage = (text: string) => {
     const trimmed = text.trim();
     if (!trimmed || mutation.isPending) return;
@@ -55,8 +86,11 @@ export function FloatingChatbot() {
       content: m.content,
     }));
 
+    const langConfig = LANGUAGES.find((l) => l.code === lang)!;
+    const messageWithLang = `[${langConfig.instruction}]\n${trimmed}`;
+
     mutation.mutate(
-      { data: { message: trimmed, history } },
+      { data: { message: messageWithLang, history } },
       {
         onSuccess: (data) => {
           setMessages((prev) => [
@@ -83,9 +117,10 @@ export function FloatingChatbot() {
     }
   };
 
+  const suggestions = SUGGESTED_QUESTIONS[lang];
+
   return (
     <>
-      {/* Floating open button */}
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
@@ -96,11 +131,10 @@ export function FloatingChatbot() {
         </button>
       )}
 
-      {/* Chat window */}
       {isOpen && (
         <div
           className="fixed bottom-24 right-6 z-50 w-[340px] max-w-[calc(100vw-2rem)] rounded-2xl border border-slate-200 bg-white shadow-2xl flex flex-col overflow-hidden"
-          style={{ height: "490px" }}
+          style={{ height: "510px" }}
         >
           {/* Header */}
           <div className="flex items-center gap-2.5 px-4 py-3 border-b border-slate-100 flex-shrink-0 bg-white">
@@ -114,9 +148,28 @@ export function FloatingChatbot() {
                 <p className="text-[10px] text-muted-foreground">AI Detection Assistant</p>
               </div>
             </div>
+
+            {/* Language selector */}
+            <div className="flex items-center gap-1 bg-slate-100 rounded-lg p-0.5">
+              {LANGUAGES.map((l) => (
+                <button
+                  key={l.code}
+                  onClick={() => handleLangChange(l.code)}
+                  className={`text-[10px] font-semibold px-2 py-1 rounded-md transition-all ${
+                    lang === l.code
+                      ? "bg-white text-primary shadow-sm"
+                      : "text-slate-500 hover:text-slate-700"
+                  }`}
+                  title={l.flag}
+                >
+                  {l.flag} {l.label}
+                </button>
+              ))}
+            </div>
+
             <button
               onClick={() => setIsOpen(false)}
-              className="text-muted-foreground hover:text-foreground transition-colors ml-2"
+              className="text-muted-foreground hover:text-foreground transition-colors ml-1"
               aria-label="Minimize"
             >
               <Minus className="w-4 h-4" />
@@ -138,7 +191,6 @@ export function FloatingChatbot() {
                     <Bot className="w-3.5 h-3.5 text-white" />
                   </div>
                 )}
-
                 <div
                   className={`max-w-[82%] px-3 py-2.5 rounded-2xl text-sm leading-relaxed shadow-sm ${
                     msg.role === "user"
@@ -163,7 +215,6 @@ export function FloatingChatbot() {
                     <span className="text-xs">{msg.content}</span>
                   )}
                 </div>
-
                 {msg.role === "user" && (
                   <div className="w-7 h-7 rounded-lg bg-slate-200 flex items-center justify-center flex-shrink-0 mt-0.5">
                     <User className="w-3.5 h-3.5 text-slate-500" />
@@ -191,7 +242,7 @@ export function FloatingChatbot() {
           {/* Suggested chips */}
           {messages.length === 1 && (
             <div className="px-3 pb-2 pt-1 flex flex-wrap gap-1.5 flex-shrink-0 bg-white border-t border-slate-100">
-              {SUGGESTED_QUESTIONS.map((q) => (
+              {suggestions.map((q) => (
                 <button
                   key={q}
                   onClick={() => sendMessage(q)}
@@ -211,7 +262,13 @@ export function FloatingChatbot() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder="Ask about deepfakes or AI images..."
+              placeholder={
+                lang === "fil"
+                  ? "Magtanong tungkol sa deepfakes..."
+                  : lang === "bsy"
+                  ? "Mangutana bahin sa deepfakes..."
+                  : "Ask about deepfakes or AI images..."
+              }
               rows={1}
               className="flex-1 resize-none bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs text-foreground placeholder:text-slate-400 focus:outline-none focus:border-primary/50 focus:ring-2 focus:ring-primary/10 transition-all chatbot-scroll"
               style={{ maxHeight: "80px" }}
@@ -227,7 +284,6 @@ export function FloatingChatbot() {
         </div>
       )}
 
-      {/* Circular close button */}
       {isOpen && (
         <button
           onClick={() => setIsOpen(false)}
