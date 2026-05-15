@@ -24,7 +24,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
         <div className="container mx-auto px-6 py-6 flex flex-col md:flex-row items-center justify-between gap-4 border-b border-slate-100">
           <Link href="/" className="flex items-center gap-2">
             <ScanSearch className="w-4 h-4 text-primary" />
-            <span className="font-bold text-sm text-foreground tracking-tight">
+            <span className="font-bold text-sm text-primary tracking-tight">
               SYNTRA<span className="text-primary">.</span>
             </span>
           </Link>
