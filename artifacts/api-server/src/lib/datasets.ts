@@ -54,6 +54,15 @@ function escapeRegex(str: string): string {
   return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
+/**
+ * Strip the language-instruction prefix injected by the frontend.
+ * Format: "[Some instruction.]\nActual user query"
+ */
+function extractUserQuery(raw: string): string {
+  const match = raw.match(/^\[.*?\]\s*\n([\s\S]*)$/);
+  return match ? match[1].trim() : raw.trim();
+}
+
 function scoreRelevance(content: string, query: string): number {
   const normalizedQuery = query.toLowerCase();
   const normalizedContent = content.toLowerCase();
@@ -67,22 +76,27 @@ function scoreRelevance(content: string, query: string): number {
   return score;
 }
 
-export function retrieveRelevantContext(query: string, maxChars = 8000): { context: string; sources: string[] } {
-  const scored = DATASETS.map((ds) => ({
-    ds,
-    score: scoreRelevance(ds.content, query),
-  }))
-    .filter((x) => x.score > 0)
-    .sort((a, b) => b.score - a.score);
+/**
+ * Always include all 5 datasets, sorted by relevance (most relevant first).
+ * Each dataset gets an equal share of the char budget.
+ */
+export function retrieveRelevantContext(
+  query: string,
+  maxChars = 12000,
+): { context: string; sources: string[] } {
+  const cleanQuery = extractUserQuery(query);
 
+  const sorted = DATASETS.map((ds) => ({
+    ds,
+    score: scoreRelevance(ds.content, cleanQuery),
+  })).sort((a, b) => b.score - a.score);
+
+  const snippetSize = Math.floor(maxChars / DATASETS.length);
   const usedSources: string[] = [];
   let context = "";
-  const budget = maxChars;
 
-  const toUse = scored.length > 0 ? scored.slice(0, 3) : DATASETS.slice(0, 2).map((ds) => ({ ds, score: 0 }));
-
-  for (const { ds } of toUse) {
-    const snippet = ds.content.slice(0, Math.floor(budget / toUse.length));
+  for (const { ds } of sorted) {
+    const snippet = ds.content.slice(0, snippetSize);
     context += `\n\n--- SOURCE: ${ds.label} ---\n${snippet}`;
     usedSources.push(ds.label);
   }
