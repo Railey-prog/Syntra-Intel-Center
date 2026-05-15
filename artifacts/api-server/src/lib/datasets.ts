@@ -110,12 +110,13 @@ function splitIntoParagraphs(content: string, minLen = 150): string[] {
  *    source is silenced on low-relevance queries.
  * 4. Fill the remaining budget with the highest-scoring paragraphs across
  *    all datasets, ranked globally.
- * 5. Cap total context at maxChars (~16 000 chars ≈ 4 000 tokens) to
- *    stay within Groq free-tier limits (12 000 TPM).
+ * 5. Cap total context at maxChars (~28 000 chars ≈ 7 000 tokens) to
+ *    maximise context while staying within Groq's 12 000-token request limit
+ *    (system prompt ~400 tokens + context ~7 000 + messages ~200 + 4 096 response ≈ 11 700).
  */
 export function retrieveRelevantContext(
   query: string,
-  maxChars = 16000,
+  maxChars = 28000,
 ): { context: string; sources: string[] } {
   const cleanQuery = extractUserQuery(query);
 
