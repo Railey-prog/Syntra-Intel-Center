@@ -140,20 +140,20 @@ export function FloatingChatbot() {
                   className={`max-w-[82%] px-3 py-2.5 rounded-2xl text-sm leading-relaxed shadow-sm ${
                     msg.role === "user"
                       ? "bg-primary text-white rounded-br-sm"
-                      : "bg-[#0f1623] border border-slate-700/60 text-white rounded-bl-sm"
+                      : "bg-white border border-slate-200 text-foreground rounded-bl-sm"
                   }`}
                 >
                   {msg.role === "assistant" ? (
                     <div className="prose prose-sm max-w-none
-                      prose-headings:text-amber-400 prose-headings:font-bold prose-headings:text-xs prose-headings:mb-1.5 prose-headings:mt-2.5 prose-headings:tracking-wide
-                      prose-p:text-slate-200 prose-p:text-xs prose-p:leading-relaxed prose-p:my-1
-                      prose-ul:my-1.5 prose-ul:pl-4 prose-li:text-xs prose-li:text-slate-200 prose-li:my-0.5
+                      prose-headings:text-primary prose-headings:font-bold prose-headings:text-xs prose-headings:mb-1.5 prose-headings:mt-2.5 prose-headings:tracking-wide
+                      prose-p:text-slate-700 prose-p:text-xs prose-p:leading-relaxed prose-p:my-1
+                      prose-ul:my-1.5 prose-ul:pl-4 prose-li:text-xs prose-li:text-slate-700 prose-li:my-0.5
                       prose-ol:my-1.5 prose-ol:pl-4 prose-ol:text-xs
-                      prose-strong:text-amber-400 prose-strong:font-semibold
-                      prose-em:text-slate-400 prose-em:text-[10px]
-                      prose-code:text-amber-300 prose-code:bg-amber-400/10 prose-code:px-1 prose-code:rounded prose-code:text-xs
+                      prose-strong:text-primary prose-strong:font-semibold
+                      prose-em:text-slate-500 prose-em:text-[10px]
+                      prose-code:text-primary prose-code:bg-primary/10 prose-code:px-1 prose-code:rounded prose-code:text-xs
                       [&_h2]:text-xs [&_h3]:text-xs [&_h4]:text-xs
-                      [&_ul]:list-disc [&_ul>li]:marker:text-amber-400
+                      [&_ul]:list-disc [&_ul>li]:marker:text-primary
                     ">
                       <ReactMarkdown>{msg.content}</ReactMarkdown>
                     </div>
