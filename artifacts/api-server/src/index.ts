@@ -2,7 +2,7 @@ import app from "./app";
 import { logger } from "./lib/logger";
 
 const REQUIRED_ENV_VARS = [
-  { key: "OPENROUTER_API_KEY", desc: "OpenRouter AI (chatbot)" },
+  { key: "GROQ_API_KEY", desc: "Groq AI (chatbot)" },
   { key: "SIGHTENGINE_API_USER", desc: "SightEngine (image analysis)" },
   { key: "SIGHTENGINE_API_SECRET", desc: "SightEngine (image analysis)" },
 ];

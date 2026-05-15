@@ -4,39 +4,8 @@ import { retrieveRelevantContext } from "../lib/datasets";
 
 const router: IRouter = Router();
 
-const MODEL = "arcee-ai/trinity-large-thinking:free";
-const OPENROUTER_BASE = "https://openrouter.ai/api/v1/chat/completions";
-
-/**
- * Strips <think>...</think> blocks emitted by thinking models.
- *
- * Handles all observed variants:
- *   A) "<think>internal thoughts</think>\n\nActual answer"
- *      → keeps "Actual answer"
- *   B) "<think>Actual answer</think>"  (whole reply wrapped in think tags)
- *      → extracts inner content as the answer
- *   C) "<think>unclosed tag\n Actual answer"  (no closing tag)
- *      → strips only the lone tag, keeps the rest
- *   D) No think tags at all → returns as-is
- */
-function stripThinkTags(raw: string): string {
-  // Step 1: remove all complete <think>...</think> paired blocks
-  const afterPairs = raw.replace(/<think>[\s\S]*?<\/think>/gi, "").trim();
-
-  if (afterPairs.length > 0) {
-    // Content existed outside the think blocks — also clean up any stray lone tags
-    return afterPairs.replace(/<think>/gi, "").replace(/<\/think>/gi, "").trim();
-  }
-
-  // Step 2: nothing left after removing pairs → entire reply was inside a think block
-  // Extract the inner content so we don't return an empty string
-  const innerMatch = raw.match(/^[\s]*<think>([\s\S]*?)<\/think>[\s]*$/i);
-  if (innerMatch) return innerMatch[1].trim();
-
-  // Step 3: no complete pairs and no lone think tags matched above
-  // Just strip any remaining lone tags and return whatever is left
-  return raw.replace(/<think>/gi, "").replace(/<\/think>/gi, "").trim();
-}
+const MODEL = "llama-3.3-70b-versatile";
+const GROQ_BASE = "https://api.groq.com/openai/v1/chat/completions";
 
 function isRateLimitError(err: unknown): boolean {
   const msg = err instanceof Error ? err.message : String(err);
@@ -62,19 +31,17 @@ async function withRetry<T>(
   throw lastErr;
 }
 
-async function callOpenRouter(
+async function callGroq(
   messages: { role: string; content: string }[],
 ): Promise<string> {
-  const apiKey = process.env.OPENROUTER_API_KEY;
-  if (!apiKey) throw new Error("OPENROUTER_API_KEY is not set.");
+  const apiKey = process.env.GROQ_API_KEY;
+  if (!apiKey) throw new Error("GROQ_API_KEY is not set.");
 
-  const res = await fetch(OPENROUTER_BASE, {
+  const res = await fetch(GROQ_BASE, {
     method: "POST",
     headers: {
       "Authorization": `Bearer ${apiKey}`,
       "Content-Type": "application/json",
-      "HTTP-Referer": "https://syntra.replit.app",
-      "X-Title": "Syntra Intel",
     },
     body: JSON.stringify({
       model: MODEL,
@@ -86,22 +53,17 @@ async function callOpenRouter(
 
   if (!res.ok) {
     const body = await res.text();
-    throw new Error(`OpenRouter error ${res.status}: ${body}`);
+    throw new Error(`Groq error ${res.status}: ${body}`);
   }
 
   const data = (await res.json()) as {
-    choices?: { message?: { content?: string | null; reasoning?: string } }[];
+    choices?: { message?: { content?: string | null } }[];
     error?: { message?: string };
   };
 
-  if (data.error) throw new Error(data.error.message ?? "Unknown OpenRouter error");
+  if (data.error) throw new Error(data.error.message ?? "Unknown Groq error");
 
-  const message = data.choices?.[0]?.message;
-  // Thinking models (e.g. trinity-large-thinking) may return content: null
-  // with the actual answer in the `reasoning` field. Fall back to it.
-  const raw = message?.content || message?.reasoning || "";
-
-  return stripThinkTags(raw);
+  return data.choices?.[0]?.message?.content ?? "";
 }
 
 router.post("/chat", async (req, res): Promise<void> => {
@@ -172,7 +134,7 @@ STEP 3 — FORMAT YOUR ANSWER
       { role: "user", content: message },
     ];
 
-    const reply = await withRetry(() => callOpenRouter(messages));
+    const reply = await withRetry(() => callGroq(messages));
 
     req.log.info({ sources, model: MODEL }, "Chat response generated");
 
@@ -183,7 +145,7 @@ STEP 3 — FORMAT YOUR ANSWER
       })
     );
   } catch (err) {
-    req.log.error({ err }, "OpenRouter API error");
+    req.log.error({ err }, "Groq API error");
     if (isRateLimitError(err)) {
       res.status(429).json({ error: "The chatbot is temporarily busy due to high demand. Please wait a moment and try again." });
     } else {
