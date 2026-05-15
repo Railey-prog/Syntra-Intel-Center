@@ -59,13 +59,16 @@ async function callOpenRouter(
   }
 
   const data = (await res.json()) as {
-    choices?: { message?: { content?: string } }[];
+    choices?: { message?: { content?: string | null; reasoning?: string } }[];
     error?: { message?: string };
   };
 
   if (data.error) throw new Error(data.error.message ?? "Unknown OpenRouter error");
 
-  return data.choices?.[0]?.message?.content ?? "";
+  const message = data.choices?.[0]?.message;
+  // Thinking models (e.g. trinity-large-thinking) may return content: null
+  // with the actual answer in the `reasoning` field. Fall back to it.
+  return message?.content || message?.reasoning || "";
 }
 
 router.post("/chat", async (req, res): Promise<void> => {
