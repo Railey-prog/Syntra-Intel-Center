@@ -1,7 +1,11 @@
 import { Router, type IRouter } from "express";
-import { GoogleGenAI } from "@google/genai";
 import { SendChatMessageBody, SendChatMessageResponse } from "@workspace/api-zod";
 import { retrieveRelevantContext } from "../lib/datasets";
+
+const router: IRouter = Router();
+
+const MODEL = "deepseek/deepseek-v4-flash:free";
+const OPENROUTER_BASE = "https://openrouter.ai/api/v1/chat/completions";
 
 function isRateLimitError(err: unknown): boolean {
   const msg = err instanceof Error ? err.message : String(err);
@@ -20,39 +24,48 @@ async function withRetry<T>(
     } catch (err) {
       lastErr = err;
       if (!isRateLimitError(err) || attempt === maxAttempts) throw err;
-      const delay = baseDelayMs * Math.pow(2, attempt - 1); // 2s, 4s, 8s
+      const delay = baseDelayMs * Math.pow(2, attempt - 1);
       await new Promise((r) => setTimeout(r, delay));
     }
   }
   throw lastErr;
 }
 
-const router: IRouter = Router();
+async function callOpenRouter(
+  messages: { role: string; content: string }[],
+): Promise<string> {
+  const apiKey = process.env.OPENROUTER_API_KEY;
+  if (!apiKey) throw new Error("OPENROUTER_API_KEY is not set.");
 
-const MODEL = "gemini-2.5-flash";
+  const res = await fetch(OPENROUTER_BASE, {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${apiKey}`,
+      "Content-Type": "application/json",
+      "HTTP-Referer": "https://syntra.replit.app",
+      "X-Title": "Syntra Intel",
+    },
+    body: JSON.stringify({
+      model: MODEL,
+      messages,
+      max_tokens: 8192,
+      temperature: 0.2,
+    }),
+  });
 
-let _ai: GoogleGenAI | null = null;
-function getAI(): GoogleGenAI {
-  if (!_ai) {
-    // Support both: Replit AI Integrations proxy and a standard Google AI Studio key
-    const apiKey =
-      process.env.GEMINI_API_KEY ?? process.env.AI_INTEGRATIONS_GEMINI_API_KEY;
-    const baseUrl = process.env.AI_INTEGRATIONS_GEMINI_BASE_URL;
-
-    if (!apiKey) {
-      throw new Error(
-        "No Gemini API key found. Set GEMINI_API_KEY (Google AI Studio) or AI_INTEGRATIONS_GEMINI_API_KEY."
-      );
-    }
-
-    _ai = new GoogleGenAI({
-      apiKey,
-      ...(baseUrl
-        ? { httpOptions: { apiVersion: "", baseUrl } }
-        : {}),
-    });
+  if (!res.ok) {
+    const body = await res.text();
+    throw new Error(`OpenRouter error ${res.status}: ${body}`);
   }
-  return _ai;
+
+  const data = (await res.json()) as {
+    choices?: { message?: { content?: string } }[];
+    error?: { message?: string };
+  };
+
+  if (data.error) throw new Error(data.error.message ?? "Unknown OpenRouter error");
+
+  return data.choices?.[0]?.message?.content ?? "";
 }
 
 router.post("/chat", async (req, res): Promise<void> => {
@@ -65,7 +78,7 @@ router.post("/chat", async (req, res): Promise<void> => {
   const { message, history = [] } = parsed.data;
 
   try {
-    const { context, sources } = retrieveRelevantContext(message, 12000);
+    const { context, sources } = retrieveRelevantContext(message);
 
     const systemPrompt = `You are Syntra Intel — a research assistant that answers questions STRICTLY and ONLY using the five peer-reviewed dataset excerpts below.
 
@@ -107,41 +120,27 @@ CITATION & FORMAT RULES
 - Keep responses concise: 3–5 sections maximum
 - End with **Key Takeaway:** summarizing the main finding in the user's language`;
 
-    const contents = [
+    const messages: { role: string; content: string }[] = [
+      { role: "system", content: systemPrompt },
       ...history.map((h) => ({
-        // Gemini only accepts "user" or "model" — map "assistant" → "model"
-        role: (h.role === "assistant" ? "model" : h.role) as "user" | "model",
-        parts: [{ text: h.content }],
+        role: h.role === "assistant" ? "assistant" : "user",
+        content: h.content,
       })),
-      { role: "user" as const, parts: [{ text: message }] },
+      { role: "user", content: message },
     ];
 
-    const response = await withRetry(() =>
-      getAI().models.generateContent({
-        model: MODEL,
-        contents,
-        config: {
-          systemInstruction: systemPrompt,
-          maxOutputTokens: 8192,
-          temperature: 0.2,
-        },
-      })
-    );
-
-    const reply =
-      response.text ??
-      "I could not generate a response. Please try again.";
+    const reply = await withRetry(() => callOpenRouter(messages));
 
     req.log.info({ sources, model: MODEL }, "Chat response generated");
 
     res.json(
       SendChatMessageResponse.parse({
-        reply,
+        reply: reply || "I could not generate a response. Please try again.",
         sources,
       })
     );
   } catch (err) {
-    req.log.error({ err }, "Gemini API error");
+    req.log.error({ err }, "OpenRouter API error");
     if (isRateLimitError(err)) {
       res.status(429).json({ error: "The chatbot is temporarily busy due to high demand. Please wait a moment and try again." });
     } else {
