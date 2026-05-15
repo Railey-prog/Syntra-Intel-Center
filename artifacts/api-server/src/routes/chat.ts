@@ -26,7 +26,7 @@ router.post("/chat", async (req, res): Promise<void> => {
   const { message, history = [] } = parsed.data;
 
   try {
-    const { context, sources } = retrieveRelevantContext(message);
+    const { context, sources } = retrieveRelevantContext(message, 4000);
 
     const systemPrompt = `You are Syntra Intel — an AI assistant that answers ONLY using the five peer-reviewed research datasets provided below. You have no other knowledge source.
 
@@ -68,9 +68,9 @@ CITATION & FORMAT RULES
     ];
 
     const completion = await getGroq().chat.completions.create({
-      model: "llama-3.3-70b-versatile",
+      model: "llama-3.1-8b-instant",
       messages,
-      max_tokens: 1024,
+      max_tokens: 768,
       temperature: 0.7,
     });
 
